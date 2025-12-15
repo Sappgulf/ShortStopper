@@ -4,10 +4,18 @@ A lightweight MV3 extension that blocks YouTube Shorts (hide + redirect-to-Home)
 
 ## Install (Chrome)
 
-1. Download the repo.
+**Option A (easiest): GitHub Releases**
+
+1. Download `ShortStopper-chrome.zip` from the latest GitHub Release.
+2. Unzip it.
+3. Open `chrome://extensions` and enable **Developer mode**.
+4. Click **Load unpacked** and select the unzipped folder.
+
+**Option B: GitHub “Download ZIP”**
+
+1. Click **Code → Download ZIP** on GitHub and unzip it.
 2. Open `chrome://extensions` and enable **Developer mode**.
-3. Click **Load unpacked** and select the repo folder.
-4. Pin the extension (optional).
+3. Click **Load unpacked** and select the unzipped folder.
 
 ## Use
 
@@ -15,6 +23,11 @@ A lightweight MV3 extension that blocks YouTube Shorts (hide + redirect-to-Home)
 - **Whitelist mode**: blocks Shorts everywhere except channels you add to the whitelist (per-channel overrides still apply).
 - **Stats**: counts blocked items and shows a simple trend + top channels.
 - **Block ads/trackers (basic)**: enables a small DNR blocklist. When you turn it on, Chrome will prompt for `<all_urls>` host access so it can work across the web.
+
+## For maintainers
+
+- Build the Chrome zip: `bash scripts/package-chrome.sh`
+- Creating a tag like `v1.0.0` triggers GitHub Actions to attach `ShortStopper-chrome.zip` to a Release.
 
 ## iOS / Safari
 
@@ -31,4 +44,3 @@ To actually use `blocker.json` you’d package it into an iOS Safari content-blo
 - Settings live in `chrome.storage.sync` (Chrome) or `localStorage` (iOS PWA).
 - Stats live in `chrome.storage.local` (Chrome) or `localStorage` (iOS PWA).
 - Network blocking is done via Chrome’s `declarativeNetRequest` rulesets.
-

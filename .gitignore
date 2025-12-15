@@ -5,3 +5,6 @@
 # Chrome MV3 generated when loading unpacked extensions
 _metadata/
 
+# Build artifacts
+dist/
+*.zip
