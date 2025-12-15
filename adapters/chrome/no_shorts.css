@@ -1,0 +1,38 @@
+/* The content script toggles these root flags; CSS only acts when enabled. */
+:root[data-ns-preblock="true"] {
+  background: Canvas !important;
+}
+:root[data-ns-preblock="true"] body {
+  display: none !important;
+}
+
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-shelf-renderer[is-shorts],
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-reel-shelf-renderer,
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-reel-item-renderer,
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-item-renderer[is-shorts],
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-item-renderer[is-shorts-grid],
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-video-renderer[is-shorts],
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-grid-video-renderer[is-shorts] {
+  display: none !important;
+}
+
+/* Hide any link pointing to /shorts/ or /feed/shorts */
+:root[data-ns-enabled="true"][data-ns-hide-links="true"] a[href^="/shorts/"],
+:root[data-ns-enabled="true"][data-ns-hide-links="true"] a[href^="/feed/shorts"] {
+  display: none !important;
+}
+
+/* Hide “Shorts” in the left guide by URL (language-proof). */
+:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-guide-entry-renderer a[href^="/shorts"],
+:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-guide-entry-renderer a[href^="/feed/shorts"],
+:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-mini-guide-entry-renderer a[href^="/feed/shorts"],
+:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-mini-guide-entry-renderer a[href^="/shorts"] {
+  display: none !important;
+}
+
+/* Hide channel "Shorts" tab by URL. */
+:root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] a[title][href$="/shorts"],
+:root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] a[href*="/shorts"] {
+  display: none !important;
+}
+

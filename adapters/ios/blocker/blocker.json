@@ -1,0 +1,33 @@
+[
+  {
+    "trigger": {
+      "url-filter": ".*",
+      "if-domain": ["youtube.com", "www.youtube.com", "m.youtube.com"]
+    },
+    "action": {
+      "type": "css-display-none",
+      "selector": "ytd-rich-shelf-renderer[is-shorts],ytd-reel-shelf-renderer,ytd-reel-item-renderer,ytd-rich-item-renderer[is-shorts],ytd-rich-item-renderer[is-shorts-grid],ytd-video-renderer[is-shorts],ytd-grid-video-renderer[is-shorts]"
+    }
+  },
+  {
+    "trigger": {
+      "url-filter": ".*",
+      "if-domain": ["youtube.com", "www.youtube.com", "m.youtube.com"]
+    },
+    "action": {
+      "type": "css-display-none",
+      "selector": "a[href^=\"/shorts/\"],a[href^=\"/feed/shorts\"],ytd-guide-entry-renderer a[href^=\"/shorts\"],ytd-guide-entry-renderer a[href^=\"/feed/shorts\"],ytd-mini-guide-entry-renderer a[href^=\"/shorts\"],ytd-mini-guide-entry-renderer a[href^=\"/feed/shorts\"]"
+    }
+  },
+  {
+    "trigger": {
+      "url-filter": ".*",
+      "if-domain": ["youtube.com", "www.youtube.com", "m.youtube.com"]
+    },
+    "action": {
+      "type": "css-display-none",
+      "selector": "a[title][href$=\"/shorts\"],a[href*=\"/shorts\"]"
+    }
+  }
+]
+

@@ -1,0 +1,7 @@
+.DS_Store
+.idea/
+.vscode/
+
+# Chrome MV3 generated when loading unpacked extensions
+_metadata/
+

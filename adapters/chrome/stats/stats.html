@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="stats.css" />
+  <title>No Shorts — Stats</title>
+</head>
+<body>
+  <main class="wrap">
+    <header class="head">
+      <h1>No Shorts — Stats</h1>
+      <div class="muted" id="rangeNote">Last 14 days</div>
+    </header>
+
+    <section class="grid">
+      <div class="card">
+        <div class="k">Today</div>
+        <div class="v" id="todayTotal">0</div>
+        <div class="muted">blocked</div>
+      </div>
+      <div class="card">
+        <div class="k">Last 7 days</div>
+        <div class="v" id="weekTotal">0</div>
+        <div class="muted">blocked</div>
+      </div>
+      <div class="card">
+        <div class="k">Peak day</div>
+        <div class="v" id="peakTotal">0</div>
+        <div class="muted" id="peakDate">—</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <h2>Trend</h2>
+        <div class="row">
+          <label class="muted">Days</label>
+          <select id="days">
+            <option value="7">7</option>
+            <option value="14" selected>14</option>
+            <option value="30">30</option>
+            <option value="90">90</option>
+          </select>
+        </div>
+      </div>
+      <svg id="chart" viewBox="0 0 600 160" role="img" aria-label="Blocked per day trend"></svg>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <h2>Top channels</h2>
+        <div class="muted" id="topNote">Last 14 days</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th class="num">Blocked</th>
+          </tr>
+        </thead>
+        <tbody id="topChannels"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script type="module" src="stats.js"></script>
+</body>
+</html>
+

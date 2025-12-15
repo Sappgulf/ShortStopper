@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "regexSubstitution": "https://\\1/"
+      }
+    },
+    "condition": {
+      "regexFilter": "^https?://((?:[A-Za-z0-9-]+\\.)?youtube\\.com)/shorts/([A-Za-z0-9_-]{5,}).*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "regexSubstitution": "https://\\1/"
+      }
+    },
+    "condition": {
+      "regexFilter": "^https?://((?:[A-Za-z0-9-]+\\.)?youtube\\.com)/shorts/?([?#].*)?$",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "regexSubstitution": "https://\\1/"
+      }
+    },
+    "condition": {
+      "regexFilter": "^https?://((?:[A-Za-z0-9-]+\\.)?youtube\\.com)/feed/shorts/?([?#].*)?$",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  }
+]

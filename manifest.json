@@ -1,0 +1,60 @@
+{
+  "manifest_version": 3,
+  "name": "No Shorts Companion",
+  "version": "1.2.0",
+  "description": "Hide/redirect Shorts with per-channel modes, whitelist mode, and local stats.",
+  "action": {
+    "default_title": "No Shorts",
+    "default_popup": "adapters/chrome/popup/popup.html"
+  },
+  "options_page": "adapters/chrome/options/options.html",
+  "permissions": [
+    "storage",
+    "tabs",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "*://www.youtube.com/*",
+    "*://m.youtube.com/*",
+    "*://youtube.com/*"
+  ],
+  "background": {
+    "service_worker": "adapters/chrome/service_worker.js",
+    "type": "module"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "shorts_redirect",
+        "enabled": true,
+        "path": "rules/shorts_redirect.json"
+      },
+      {
+        "id": "basic_block",
+        "enabled": false,
+        "path": "rules/basic_block.json"
+      }
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://www.youtube.com/*",
+        "*://m.youtube.com/*",
+        "*://youtube.com/*"
+      ],
+      "run_at": "document_start",
+      "css": [
+        "adapters/chrome/no_shorts.css"
+      ],
+      "js": [
+        "adapters/chrome/content.js"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  }
+}

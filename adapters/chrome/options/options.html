@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="options.css" />
+  <title>No Shorts — Options</title>
+</head>
+<body>
+  <main class="wrap">
+    <header class="head">
+      <h1>No Shorts — Options</h1>
+      <a class="link" href="#" id="openStats">Open stats</a>
+    </header>
+
+    <p class="muted">
+      Whitelist mode blocks Shorts everywhere except channels you add to the whitelist. Per-channel modes override behavior on those pages.
+      Strict redirect is fastest but cannot be per-channel, so it auto-disables its effect when whitelist mode is on.
+    </p>
+
+    <section class="panel" aria-label="Global settings">
+      <div class="row"><label>Enabled</label><input id="enabled" type="checkbox" /></div>
+      <div class="row"><label>Block ads/trackers (basic)</label><input id="adBlockEnabled" type="checkbox" /></div>
+      <div class="row"><label>Whitelist mode</label><input id="whitelistMode" type="checkbox" /></div>
+      <div class="row"><label>Strict redirect (fast)</label><input id="strictRedirect" type="checkbox" /></div>
+      <div class="row"><label>Redirect Shorts → Home</label><input id="redirectShorts" type="checkbox" /></div>
+      <div class="row"><label>Hide Shorts shelves</label><input id="hideShelves" type="checkbox" /></div>
+      <div class="row"><label>Hide Shorts links</label><input id="hideLinks" type="checkbox" /></div>
+      <div class="row"><label>Hide sidebar “Shorts”</label><input id="hideSidebarEntry" type="checkbox" /></div>
+      <div class="row"><label>Hide channel Shorts tab</label><input id="hideChannelShortsTab" type="checkbox" /></div>
+      <div class="note muted" id="status"></div>
+    </section>
+
+    <section class="panel" aria-label="Whitelist">
+      <div class="rowhead">
+        <h2>Whitelist</h2>
+        <button class="btn" id="clearWhitelist" type="button">Clear</button>
+      </div>
+      <div class="muted small">Channels you approve (e.g., @handle or UC...)</div>
+      <ul id="whitelistList" class="list"></ul>
+    </section>
+
+    <section class="panel" aria-label="Channel overrides">
+      <div class="rowhead">
+        <h2>Per-channel modes</h2>
+        <button class="btn" id="clearOverrides" type="button">Clear</button>
+      </div>
+      <div class="muted small">Modes: both, hide, redirect, off</div>
+      <table class="table">
+        <thead><tr><th>Channel</th><th>Mode</th><th></th></tr></thead>
+        <tbody id="overrideTable"></tbody>
+      </table>
+    </section>
+
+    <section class="panel" aria-label="Import Export">
+      <h2>Backup</h2>
+      <div class="muted small">Copy/paste your settings JSON for backup/restore.</div>
+      <textarea id="backup" spellcheck="false"></textarea>
+      <div class="rowactions">
+        <button class="btn" id="copy" type="button">Copy</button>
+        <button class="btn" id="restore" type="button">Restore</button>
+      </div>
+      <div class="note muted" id="backupStatus"></div>
+    </section>
+  </main>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>
+

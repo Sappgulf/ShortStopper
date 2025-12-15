@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="popup.css" />
+  <title>No Shorts</title>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">No Shorts</div>
+    <div class="tag" id="counterTag">0 blocked today</div>
+  </header>
+
+  <main class="card">
+    <label class="row">
+      <span>Enabled</span>
+      <input id="enabled" type="checkbox" />
+    </label>
+
+    <label class="row">
+      <span>Block ads/trackers (basic)</span>
+      <input id="adBlockEnabled" type="checkbox" />
+    </label>
+
+    <div class="divider"></div>
+
+    <label class="row">
+      <span>Whitelist mode (allow Shorts only on whitelisted channels)</span>
+      <input id="whitelistMode" type="checkbox" />
+    </label>
+
+    <div class="mini">
+      <div class="muted">This channel</div>
+      <div id="channelKey" class="mono">Detecting…</div>
+
+      <div class="row2">
+        <button class="btn" id="toggleWhitelist" type="button" disabled>…</button>
+        <select id="channelMode" class="select" disabled>
+          <option value="both">Hide + Redirect</option>
+          <option value="hide">Hide only</option>
+          <option value="redirect">Redirect only</option>
+          <option value="off">Off on this channel</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <label class="row">
+      <span>Strict redirect (fast)</span>
+      <input id="strictRedirect" type="checkbox" />
+    </label>
+
+    <label class="row">
+      <span>Redirect Shorts → Home</span>
+      <input id="redirectShorts" type="checkbox" />
+    </label>
+
+    <label class="row">
+      <span>Hide Shorts shelves</span>
+      <input id="hideShelves" type="checkbox" />
+    </label>
+    <label class="row">
+      <span>Hide Shorts links</span>
+      <input id="hideLinks" type="checkbox" />
+    </label>
+    <label class="row">
+      <span>Hide sidebar “Shorts”</span>
+      <input id="hideSidebarEntry" type="checkbox" />
+    </label>
+    <label class="row">
+      <span>Hide channel Shorts tab</span>
+      <input id="hideChannelShortsTab" type="checkbox" />
+    </label>
+
+    <footer class="foot">
+      <a href="#" id="openStats">Stats</a>
+      <a href="#" id="openOptions">Options</a>
+      <button class="linkbtn" id="resetToday" type="button">Reset today</button>
+      <span class="muted" id="status"></span>
+    </footer>
+  </main>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
+
