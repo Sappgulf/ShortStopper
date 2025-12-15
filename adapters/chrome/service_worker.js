@@ -22,7 +22,12 @@ async function applyRulesets(settings) {
   if (shouldEnableShortsRuleset(settings)) enableRulesetIds.push("shorts_redirect");
   else disableRulesetIds.push("shorts_redirect");
 
-  if (shouldEnableAdBlockRuleset(settings)) enableRulesetIds.push("basic_block");
+  let canBlockAllHosts = false;
+  try {
+    canBlockAllHosts = await chrome.permissions.contains({ origins: ["<all_urls>"] });
+  } catch {}
+
+  if (shouldEnableAdBlockRuleset(settings) && canBlockAllHosts) enableRulesetIds.push("basic_block");
   else disableRulesetIds.push("basic_block");
 
   await chrome.declarativeNetRequest.updateEnabledRulesets({

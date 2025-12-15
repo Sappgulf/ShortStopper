@@ -70,6 +70,17 @@ async function openStats() {
   await chrome.tabs.create({ url: chrome.runtime.getURL("adapters/chrome/stats/stats.html") });
 }
 
+async function ensureAllHostsPermission() {
+  const origins = ["<all_urls>"];
+  const has = await chrome.permissions.contains({ origins });
+  if (has) return true;
+  try {
+    return await chrome.permissions.request({ origins });
+  } catch {
+    return false;
+  }
+}
+
 (async function init() {
   const s = await chrome.storage.sync.get(DEFAULT_SETTINGS);
   const settings = { ...DEFAULT_SETTINGS, ...s };
@@ -81,6 +92,16 @@ async function openStats() {
 
   for (const id of TOGGLE_IDS) {
     $(id).addEventListener("change", async () => {
+      if (id === "adBlockEnabled" && $(id).checked) {
+        const ok = await ensureAllHostsPermission();
+        if (!ok) {
+          $(id).checked = false;
+          await chrome.storage.sync.set({ [id]: false });
+          flash("status", "Permission denied");
+          return;
+        }
+      }
+
       await chrome.storage.sync.set({ [id]: $(id).checked });
       flash("status", "Saved");
     });
@@ -185,4 +206,3 @@ async function openStats() {
     openStats();
   });
 })();
-

@@ -35,6 +35,17 @@ async function loadCounter() {
   $("counterTag").textContent = `${total} blocked today`;
 }
 
+async function ensureAllHostsPermission() {
+  const origins = ["<all_urls>"];
+  const has = await chrome.permissions.contains({ origins });
+  if (has) return true;
+  try {
+    return await chrome.permissions.request({ origins });
+  } catch {
+    return false;
+  }
+}
+
 (async function init() {
   await loadCounter();
 
@@ -87,6 +98,17 @@ async function loadCounter() {
 
   for (const id of TOGGLE_IDS) {
     $(id).addEventListener("change", async () => {
+      if (id === "adBlockEnabled" && $(id).checked) {
+        const ok = await ensureAllHostsPermission();
+        if (!ok) {
+          $(id).checked = false;
+          settings[id] = false;
+          await chrome.storage.sync.set({ [id]: false });
+          setStatus("Permission denied");
+          return;
+        }
+      }
+
       settings[id] = $(id).checked;
       await chrome.storage.sync.set({ [id]: settings[id] });
       setStatus("Saved");
@@ -138,4 +160,3 @@ async function loadCounter() {
     chrome.tabs.create({ url: chrome.runtime.getURL("adapters/chrome/stats/stats.html") });
   });
 })();
-
