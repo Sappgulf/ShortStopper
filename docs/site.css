@@ -1,0 +1,82 @@
+:root{
+  color-scheme: light dark;
+  --bg: Canvas;
+  --fg: CanvasText;
+  --muted: color-mix(in oklab, var(--fg) 62%, var(--bg));
+  --card: color-mix(in oklab, var(--bg) 94%, var(--fg));
+  --border: color-mix(in oklab, var(--fg) 18%, var(--bg));
+  --accent: oklch(70% 0.16 250);
+  font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+body{ margin:0; background:var(--bg); color:var(--fg); }
+.wrap{ max-width: 980px; margin: 0 auto; padding: 26px 16px 38px; }
+
+.head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.brand{ display:flex; gap: 14px; align-items:center; }
+.logo{ width: 56px; height: 56px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); }
+h1{ margin:0; font-size: 28px; letter-spacing: .2px; }
+.muted{ color: var(--muted); }
+
+.actions{ display:flex; gap: 10px; flex-wrap: wrap; }
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: .7rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: inherit;
+  text-decoration: none;
+}
+.btn.primary{
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
+  background: color-mix(in oklab, var(--accent) 18%, var(--card));
+}
+.btn:hover{ border-color: color-mix(in oklab, var(--accent) 55%, var(--border)); }
+
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.card{
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 18px;
+  padding: 14px 14px 12px;
+}
+
+h2{ margin:0 0 8px; font-size: 16px; }
+
+.steps{ margin: 0; padding-left: 18px; }
+.list{ margin: 0; padding-left: 18px; }
+.note{ margin-top: 10px; font-size: 13px; }
+
+code{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 13px;
+}
+
+.foot{
+  margin-top: 18px;
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  justify-content:center;
+  color: var(--muted);
+}
+.foot a{ color: inherit; text-decoration-color: color-mix(in oklab, var(--fg) 30%, transparent); }
+.foot a:hover{ text-decoration-color: var(--accent); }
+.dot{ opacity: .7; }
+

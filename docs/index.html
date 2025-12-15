@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ShortStopper</title>
+  <meta name="description" content="Block YouTube Shorts (hide + redirect-to-Home), with per-channel controls and local stats." />
+  <link rel="icon" href="../assets/icon48.png" />
+  <link rel="stylesheet" href="./site.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="head">
+      <div class="brand">
+        <img class="logo" src="../assets/icon128.png" alt="" />
+        <div>
+          <h1>ShortStopper</h1>
+          <div class="muted">Block YouTube Shorts. Fast. Local. No accounts.</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/Sappgulf/ShortStopper/releases/latest/download/ShortStopper-chrome.zip">
+          Download (Chrome)
+        </a>
+        <a class="btn" href="https://github.com/Sappgulf/ShortStopper">View on GitHub</a>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Install (Chrome)</h2>
+        <ol class="steps">
+          <li>Download and unzip <code>ShortStopper-chrome.zip</code>.</li>
+          <li>Open <code>chrome://extensions</code> and enable <strong>Developer mode</strong>.</li>
+          <li>Click <strong>Load unpacked</strong> and select the unzipped folder.</li>
+        </ol>
+        <div class="muted note">
+          Chrome does not allow “one-click install” outside the Chrome Web Store. This is the simplest unpacked install.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>What it does</h2>
+        <ul class="list">
+          <li>Blocks <code>/shorts/*</code> and <code>/feed/shorts</code> (redirects to Home).</li>
+          <li>Hides Shorts shelves, links, sidebar entries, and channel Shorts tabs.</li>
+          <li>Whitelist mode + per-channel overrides.</li>
+          <li>Local stats (no accounts, no servers).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Optional: basic ad/tracker blocking</h2>
+        <div class="muted">
+          If you enable <strong>Block ads/trackers (basic)</strong>, Chrome will prompt for the <code>&lt;all_urls&gt;</code> permission.
+          If you deny it, the blocker stays off.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>iOS / Safari</h2>
+        <div class="muted">
+          iOS Safari doesn’t support Chrome extensions. This repo includes Safari content-blocker rules and a small PWA shell,
+          but using them requires packaging an iOS content-blocker app.
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <a href="https://github.com/Sappgulf/ShortStopper/blob/main/PRIVACY.md">Privacy</a>
+      <span class="dot">•</span>
+      <a href="https://github.com/Sappgulf/ShortStopper/issues">Support</a>
+    </footer>
+  </main>
+</body>
+</html>
+
