@@ -169,9 +169,14 @@ async function ensureAdblockHistoryLoaded() {
   if (adblockHistoryLoaded) return;
   if (adblockHistoryLoadPromise) return adblockHistoryLoadPromise;
   adblockHistoryLoadPromise = (async () => {
-    const local = await getLocal({ [ADBLOCK_HISTORY_KEY]: null });
-    adblockHistory = sanitizeAdblockHistory(local?.[ADBLOCK_HISTORY_KEY]) || emptyAdblockHistory();
-    adblockHistoryLoaded = true;
+    try {
+      const local = await getLocal({ [ADBLOCK_HISTORY_KEY]: null });
+      adblockHistory = sanitizeAdblockHistory(local?.[ADBLOCK_HISTORY_KEY]) || emptyAdblockHistory();
+    } catch {
+      adblockHistory = emptyAdblockHistory();
+    } finally {
+      adblockHistoryLoaded = true;
+    }
   })();
   return adblockHistoryLoadPromise;
 }
@@ -333,6 +338,10 @@ chrome.declarativeNetRequest?.onRuleMatchedDebug?.addListener?.((info) => {
 
 chrome.tabs?.onRemoved?.addListener?.((tabId) => {
   adblockState.delete(tabId);
+});
+
+chrome.runtime?.onSuspend?.addListener?.(() => {
+  flushAdblockHistory().catch(() => {});
 });
 
 chrome.runtime.onInstalled.addListener(async () => {
