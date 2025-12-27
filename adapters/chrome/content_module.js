@@ -49,6 +49,52 @@ const SITE_CARD_SELECTORS = {
   facebook: "div[role='article']"
 };
 
+const SHORTS_LABEL_REPLACEMENT = "Slop";
+const NAV_LABEL_RULES = {
+  youtube: {
+    label: "Shorts",
+    replacement: SHORTS_LABEL_REPLACEMENT,
+    entrySelectors: ["ytd-guide-entry-renderer", "ytd-mini-guide-entry-renderer"],
+    hrefIncludes: ["/shorts", "/feed/shorts"]
+  },
+  instagram: {
+    label: "Reels",
+    replacement: SHORTS_LABEL_REPLACEMENT,
+    anchorSelectors: [
+      'nav a[href^="/reels"]',
+      'nav a[href^="/reel/"]',
+      'a[href*="instagram.com/reels"]',
+      'a[href*="instagram.com/reel/"]'
+    ],
+    hrefIncludes: ["/reels", "/reel/"]
+  },
+  facebook: {
+    label: "Reels",
+    replacement: SHORTS_LABEL_REPLACEMENT,
+    anchorSelectors: [
+      'div[role="navigation"] a[href*="/reels"]',
+      'div[role="navigation"] a[href*="/reel/"]',
+      'div[role="navigation"] a[href*="/watch/reels"]',
+      'a[href*="facebook.com/reels"]',
+      'a[href*="facebook.com/reel/"]',
+      'a[href*="facebook.com/watch/reels"]'
+    ],
+    hrefIncludes: ["/reels", "/reel/", "/watch/reels"]
+  },
+  snapchat: {
+    label: "Spotlight",
+    replacement: SHORTS_LABEL_REPLACEMENT,
+    anchorSelectors: ['nav a[href*="/spotlight"]', 'a[href*="snapchat.com/spotlight"]'],
+    hrefIncludes: ["/spotlight"]
+  },
+  pinterest: {
+    label: "Watch",
+    replacement: SHORTS_LABEL_REPLACEMENT,
+    anchorSelectors: ['nav a[href^="/watch"]', 'a[href*="pinterest.com/watch"]'],
+    hrefIncludes: ["/watch"]
+  }
+};
+
 const ROUTE_DEBOUNCE_MS = 90;
 const BLOCK_REPEAT_MS = 900;
 
@@ -136,6 +182,79 @@ function hideShortFormLinksOnce(rootEl, effective) {
   if (hiddenNow > 0) bumpBlocked(hiddenNow, effective.__statsKey || null);
 }
 
+function anchorMatchesHref(anchor, includes) {
+  if (!anchor || !includes?.length) return true;
+  const raw = anchor.getAttribute("href") || "";
+  if (!raw) return false;
+  return includes.some((frag) => raw.includes(frag));
+}
+
+function replaceLabelText(root, label, replacement) {
+  if (!root || root.dataset.nsRenamed === "1") return false;
+  let did = false;
+
+  const target = String(label || "").trim().toLowerCase();
+  const replacementText = String(replacement || "");
+
+  const aria = root.getAttribute("aria-label");
+  if (aria && aria.trim().toLowerCase() === target) {
+    root.setAttribute("aria-label", replacementText);
+    did = true;
+  }
+
+  const anchor = root.tagName === "A" ? root : root.querySelector("a");
+  const anchorAria = anchor?.getAttribute("aria-label");
+  if (anchorAria && anchorAria.trim().toLowerCase() === target) {
+    anchor.setAttribute("aria-label", replacementText);
+    did = true;
+  }
+
+  const nodes = root.querySelectorAll("yt-formatted-string, span, div, p, a");
+  nodes.forEach((node) => {
+    const text = node.textContent ? node.textContent.trim() : "";
+    if (text && text.toLowerCase() === target) {
+      node.textContent = replacementText;
+      did = true;
+    }
+  });
+
+  if (did) root.dataset.nsRenamed = "1";
+  return did;
+}
+
+function renameShortFormLabelsOnce(rootEl, effective) {
+  if (!effective?.enabled || !effective.__siteId) return;
+  const rule = NAV_LABEL_RULES[effective.__siteId];
+  if (!rule) return;
+
+  if (rule.entrySelectors?.length) {
+    const selector = rule.entrySelectors.join(",");
+    const nodes = new Set();
+    if (rootEl?.matches?.(selector)) nodes.add(rootEl);
+    const found = rootEl?.querySelectorAll?.(selector) || [];
+    found.forEach((el) => nodes.add(el));
+    if (!nodes.size) return;
+    nodes.forEach((entry) => {
+      const anchor = entry.querySelector?.("a[href]");
+      if (rule.hrefIncludes?.length && anchor && !anchorMatchesHref(anchor, rule.hrefIncludes)) return;
+      replaceLabelText(entry, rule.label, rule.replacement);
+    });
+    return;
+  }
+
+  const selector = rule.anchorSelectors?.join(",") || "";
+  if (!selector) return;
+  const nodes = new Set();
+  if (rootEl?.matches?.(selector)) nodes.add(rootEl);
+  const found = rootEl?.querySelectorAll?.(selector) || [];
+  found.forEach((el) => nodes.add(el));
+  if (!nodes.size) return;
+  nodes.forEach((anchor) => {
+    if (!anchorMatchesHref(anchor, rule.hrefIncludes)) return;
+    replaceLabelText(anchor, rule.label, rule.replacement);
+  });
+}
+
 let settings = { ...DEFAULT_SETTINGS };
 let effective = null;
 let navToken = 0;
@@ -181,11 +300,14 @@ function setObserverActive(active) {
 
   if (linkObserver) return;
   linkObserver = new MutationObserver((mutations) => {
-    if (!effective?.enabled || !effective.hideLinks) return;
+    const canHideLinks = !!effective?.enabled && !!effective.hideLinks;
+    const canRename = !!effective?.enabled && !!NAV_LABEL_RULES[effective.__siteId];
+    if (!canHideLinks && !canRename) return;
     for (const m of mutations) {
       for (const node of m.addedNodes) {
         if (!(node instanceof HTMLElement)) continue;
-        hideShortFormLinksOnce(node, effective);
+        if (canHideLinks) hideShortFormLinksOnce(node, effective);
+        if (canRename) renameShortFormLabelsOnce(node, effective);
       }
     }
   });
@@ -247,8 +369,9 @@ async function applyAll() {
   }
 
   unhidePage();
+  renameShortFormLabelsOnce(document, effective);
   hideShortFormLinksOnce(document, effective);
-  setObserverActive(!!effective.hideLinks);
+  setObserverActive(!!effective.hideLinks || !!NAV_LABEL_RULES[effective.__siteId]);
 
   debugLog("allowed", { siteId, reason: decision.reason, url: location.href });
 }
