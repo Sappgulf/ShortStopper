@@ -1,10 +1,22 @@
+# OS files
 .DS_Store
+Thumbs.db
+
+# Editor/IDE
 .idea/
 .vscode/
+*.swp
+*.swo
 
-# Chrome MV3 generated when loading unpacked extensions
+# Chrome extension metadata (generated when loading unpacked)
 _metadata/
 
-# Build artifacts
+# Build output
 dist/
 *.zip
+
+# Node
+node_modules/
+
+# Logs
+*.log

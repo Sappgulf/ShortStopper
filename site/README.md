@@ -1,48 +1,34 @@
-# ShortStopper Landing Page
+# ShortStopper Website
 
-Static landing page for ShortStopper (no build step).
+Static landing page for ShortStopper. No build step required.
 
-## Quick preview
+## Local preview
 
-- Open `site/index.html` in a browser.
-- Optional: `npx serve site` then open the printed URL.
+```bash
+cd site
+python3 -m http.server 8080
+# Open http://localhost:8080
+```
 
-## Configure links
+## Deploy to GitHub Pages
 
-Edit `site/app.js` and set:
+1. Go to repo **Settings → Pages**
+2. Set source to **Deploy from a branch**
+3. Select `main` branch and `/site` folder
+4. Save
 
-- `WEBSTORE_URL`
-- `DOWNLOAD_ZIP_URL`
-- `SOURCE_URL`
+Your site will be live at `https://sappgulf.github.io/ShortStopper/`
 
-If a URL is empty, the button shows "Coming soon" and is disabled.
+## Configuration
 
-## Version + updated date
+Edit `app.js` to update download links:
 
-`site/app.js` tries to read `../manifest.json` first, then `site/manifest.json`.
-If you want the version to always show on hosted pages, copy `manifest.json`
-into `site/` (or update `MANIFEST_URLS`).
+```js
+const CONFIG = {
+  WEBSTORE_URL: "",  // Chrome Web Store URL (when available)
+  DOWNLOAD_ZIP_URL: "https://github.com/Sappgulf/ShortStopper/archive/refs/heads/main.zip",
+  SOURCE_URL: "https://github.com/Sappgulf/ShortStopper"
+};
+```
 
-## GitHub Pages
-
-Option A: Deploy `site/` as the root of a separate branch.
-
-1. Copy `site/` contents into a `gh-pages` branch root.
-2. Enable Pages in repo settings.
-
-Option B: Configure Pages to serve `/site` if your repo supports it.
-
-## Netlify
-
-- Build command: none
-- Publish directory: `site`
-
-## Vercel
-
-- Framework preset: Other
-- Output directory: `site`
-
-## Assets
-
-`site/assets` reuses the extension icons from `assets/`.
-
+Empty URLs show "Coming soon" with disabled buttons.

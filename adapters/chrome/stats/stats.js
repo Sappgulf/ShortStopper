@@ -86,6 +86,14 @@ function formatSourceKey(key) {
   return key;
 }
 
+function formatPeakDate(key) {
+  if (!key || key === "—") return "—";
+  const [yyyy, mm, dd] = key.split("-").map((v) => parseInt(v, 10));
+  if (!yyyy || !mm || !dd) return key;
+  const d = new Date(yyyy, mm - 1, dd);
+  return d.toLocaleDateString([], { month: "short", day: "numeric" });
+}
+
 function renderTopChannels(tbody, channelTotals) {
   const rows = Object.entries(channelTotals)
     .sort((a, b) => b[1] - a[1])
@@ -130,8 +138,11 @@ async function refresh(days) {
   const keys = lastNDaysKeys(days);
   const values = keys.map((k) => getDayTotal(stats, k));
 
-  document.getElementById("rangeNote").textContent = `Last ${days} days`;
-  document.getElementById("topNote").textContent = `Last ${days} days`;
+  const rangeLabel = `Last ${days} days`;
+  document.getElementById("rangeNote").textContent = rangeLabel;
+  document.getElementById("topNote").textContent = rangeLabel;
+  const trendNote = document.getElementById("trendNote");
+  if (trendNote) trendNote.textContent = rangeLabel;
 
   document.getElementById("todayTotal").textContent = totals.blockedTotal;
 
@@ -142,10 +153,17 @@ async function refresh(days) {
   keys.forEach((k, i) => {
     if (values[i] > peakV) { peakV = values[i]; peakD = k; }
   });
+  const peakDateEl = document.getElementById("peakDate");
   document.getElementById("peakTotal").textContent = peakV;
-  document.getElementById("peakDate").textContent = peakD;
+  peakDateEl.textContent = formatPeakDate(peakD);
+  peakDateEl.title = peakD === "—" ? "" : peakD;
 
   renderChart(document.getElementById("chart"), values);
+  const empty = values.every((v) => v === 0);
+  const chartEmpty = document.getElementById("chartEmpty");
+  if (chartEmpty) chartEmpty.style.display = empty ? "flex" : "none";
+  const chart = document.getElementById("chart");
+  if (chart) chart.style.opacity = empty ? "0.35" : "1";
 
   const channelTotals = {};
   keys.forEach((k) => {

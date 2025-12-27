@@ -9,48 +9,55 @@
 <body>
   <main class="wrap">
     <header class="head">
-      <h1>ShortStopper — Stats</h1>
-      <div class="muted" id="rangeNote">Last 14 days</div>
+      <div>
+        <div class="eyebrow">ShortStopper</div>
+        <h1>Stats</h1>
+        <div class="muted small" id="rangeNote">Last 14 days</div>
+      </div>
+      <div class="head-actions">
+        <label class="muted small" for="days">Days</label>
+        <select id="days">
+          <option value="7">7</option>
+          <option value="14" selected>14</option>
+          <option value="30">30</option>
+          <option value="90">90</option>
+        </select>
+      </div>
     </header>
 
-    <section class="grid">
-      <div class="card">
+    <section class="grid stats-grid">
+      <div class="card stat">
         <div class="k">Today</div>
         <div class="v" id="todayTotal">0</div>
-        <div class="muted">blocked</div>
+        <div class="muted small">blocked</div>
       </div>
-      <div class="card">
+      <div class="card stat">
         <div class="k">Last 7 days</div>
         <div class="v" id="weekTotal">0</div>
-        <div class="muted">blocked</div>
+        <div class="muted small">blocked</div>
       </div>
-      <div class="card">
+      <div class="card stat">
         <div class="k">Peak day</div>
         <div class="v" id="peakTotal">0</div>
-        <div class="muted" id="peakDate">—</div>
+        <div class="muted small" id="peakDate">—</div>
       </div>
     </section>
 
-    <section class="card">
+    <section class="card chart-card">
       <div class="row">
         <h2>Trend</h2>
-        <div class="row">
-          <label class="muted">Days</label>
-          <select id="days">
-            <option value="7">7</option>
-            <option value="14" selected>14</option>
-            <option value="30">30</option>
-            <option value="90">90</option>
-          </select>
-        </div>
+        <div class="muted small" id="trendNote">Last 14 days</div>
       </div>
-      <svg id="chart" viewBox="0 0 600 160" role="img" aria-label="Blocked per day trend"></svg>
+      <div class="chart-wrap">
+        <svg id="chart" viewBox="0 0 600 160" role="img" aria-label="Blocked per day trend"></svg>
+        <div class="chart-empty muted" id="chartEmpty">No blocks yet.</div>
+      </div>
     </section>
 
     <section class="card">
       <div class="row">
         <h2>Top sources</h2>
-        <div class="muted" id="topNote">Last 14 days</div>
+        <div class="muted small" id="topNote">Last 14 days</div>
       </div>
       <table>
         <thead>

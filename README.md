@@ -1,83 +1,97 @@
-# ShortStopper (No Shorts Companion)
+<p align="center">
+  <img src="assets/logo.png" alt="ShortStopper" width="128" height="128">
+</p>
 
-A lightweight MV3 extension that blocks short-form video across YouTube Shorts, Instagram/Facebook Reels, TikTok, Snapchat Spotlight, and Pinterest Watch. Includes per-channel allow/override modes for YouTube, plus local stats and an optional basic ad/tracker blocker (Chrome-only, permission-gated).
+<h1 align="center">ShortStopper</h1>
 
-## Install (Chrome)
+<p align="center">
+  <strong>Block short-form video feeds without breaking normal browsing.</strong>
+</p>
 
-**Option A (easiest): GitHub Releases**
+<p align="center">
+  <a href="https://github.com/Sappgulf/ShortStopper/archive/refs/heads/main.zip">Download ZIP</a> •
+  <a href="#install">Install</a> •
+  <a href="#features">Features</a> •
+  <a href="#privacy">Privacy</a>
+</p>
 
-1. Download `ShortStopper-chrome.zip` from the latest GitHub Release.
-2. Unzip it.
-3. Open `chrome://extensions` and enable **Developer mode**.
-4. Click **Load unpacked** and select the unzipped folder.
+---
 
-**Option B: GitHub “Download ZIP”**
+## What it does
 
-1. Click **Code → Download ZIP** on GitHub and unzip it.
-2. Open `chrome://extensions` and enable **Developer mode**.
-3. Click **Load unpacked** and select the unzipped folder.
+ShortStopper blocks short-form video feeds across major platforms while keeping the rest of the site fully functional.
 
-## Download page
+**Supported platforms:**
+- YouTube Shorts
+- Instagram Reels
+- Facebook Reels
+- TikTok
+- Snapchat Spotlight
+- Pinterest Watch
 
-If GitHub Pages is enabled for this repo, a simple download/install page is available at:
+## Install
 
-- `https://sappgulf.github.io/ShortStopper/`
+### Chrome (Recommended)
 
-## Use
+1. [Download the ZIP](https://github.com/Sappgulf/ShortStopper/archive/refs/heads/main.zip)
+2. Unzip the downloaded file
+3. Open `chrome://extensions` in Chrome
+4. Enable **Developer mode** (toggle in top right)
+5. Click **Load unpacked**
+6. Select the unzipped `ShortStopper-main` folder
 
-- **Sites**: choose which short-form feeds to block (YouTube Shorts, Instagram Reels, Facebook Reels, TikTok, Snapchat Spotlight, Pinterest Watch).
-- **Redirect short-form pages → Home**: when enabled, Shorts/Reels pages are blocked and you’re sent to Home.
-- **Allowlist mode (YouTube only)**: blocks Shorts everywhere except channels you add to the allowlist (per-channel overrides still apply).
-- **Stats**: counts blocked items and shows a simple trend + top sources.
-- **Block ads/trackers (basic)**: enables a small DNR blocklist. When you turn it on, Chrome will prompt for permission to listed ad/tracker domains so it can block those requests across the web.
-- **Adblock insights (optional)**: shows per-tab/video blocked request counts and top domains; requires an extra permission to read matched rule info. Domains are stored locally for a short history (no URLs).
+> **Note:** Chrome requires Developer mode for extensions not from the Web Store. This is the standard way to install unpacked extensions.
 
-## Architecture
+## Features
 
-- `policy/`: route classification and decision logic.
-- `runtime/`: SPA navigation hooks, caches, and session gates.
-- `ui/`: DOM flags for CSS and UI helpers.
-- `storage/`: settings schema + validation and stats helpers.
-- `platform/`: thin wrappers for `chrome.*` APIs.
-- `adapters/`: Chrome and iOS entrypoints plus platform-specific storage.
+### Core blocking
+- **Smart route detection** — Blocks short-form feeds while allowing normal watch pages, search results, and profiles
+- **Overlay-first blocking** — Prevents redirect loops and keeps SPA navigation stable
+- **Per-site toggles** — Enable/disable blocking for each platform individually
 
-## How blocking works
+### YouTube extras
+- **Allowlist mode** — Block Shorts everywhere except channels you whitelist
+- **Per-channel overrides** — Fine-grained control for specific channels
 
-- The content script listens to SPA navigation and URL changes, then classifies the route.
-- If the route is short-form, it redirects to the site home page.
-- CSS flags hide shelves/links/nav entries as configured.
-- Optional DNR rules can redirect YouTube Shorts feeds and block ads/trackers when enabled.
+### Stats & insights
+- **Local stats** — Track how many short-form items have been blocked
+- **Optional ad/tracker blocking** — Basic ad blocker with permission-gated domains
+- **Adblock insights** — See blocked request counts (domains only, no URLs stored)
 
-## Testing
+## How it works
 
-- Run policy checks: `node scripts/test-policy.mjs`
-- Manual QA (Chrome):
-- YouTube `/results`, `/watch`, `/channel`, `/@handle` should not be blocked.
-- YouTube `/shorts`, `/feed/shorts`, and `/shorts/{id}` should redirect to Home.
-- Instagram `/reels` and `/reel/{id}` should redirect to Home; `/p/{id}` should load.
+1. Content script monitors SPA navigation and URL changes
+2. Routes are classified using a centralized policy
+3. Short-form routes trigger a redirect to the site's home page
+4. CSS rules hide Shorts shelves, links, and nav entries
+5. Optional DNR rules provide strict redirect and ad blocking
 
-## Debug logging
+## Privacy
 
-- In the target tab DevTools console: `sessionStorage.setItem("ns_debug","1")` then reload.
-- Disable with: `sessionStorage.removeItem("ns_debug")`.
+**ShortStopper does not collect, transmit, or sell any data.**
 
-## For maintainers
+- All settings stored locally in `chrome.storage.sync`
+- All stats stored locally in `chrome.storage.local`
+- No external network requests
+- No analytics or tracking
+- No accounts required
 
-- Build the Chrome zip: `bash scripts/package-chrome.sh`
-- Creating a tag like `v1.0.0` triggers GitHub Actions to attach `ShortStopper-chrome.zip` to a Release.
+See [PRIVACY.md](PRIVACY.md) for details.
 
-## iOS / Safari
+## Security
 
-Safari on iOS doesn’t support Chrome MV3 extensions. This repo includes:
+- Manifest V3 architecture
+- Strict Content Security Policy
+- Minimal permissions (only requested sites)
+- Optional permissions for ad blocking (user must approve)
+- All data validated before use
 
-- `adapters/ios/blocker/blocker.json`: Safari content-blocker rules that hide Shorts UI elements.
-- `adapters/ios/pwa/`: a small PWA settings/stats shell (hide-only semantics; no true redirect).
+See [SECURITY.md](SECURITY.md) for details.
 
-To actually use `blocker.json` you’d package it into an iOS Safari content-blocker extension (outside the scope of this repo).
+## Contributing
 
-## Privacy / Safety
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes.
 
-- No accounts, no analytics, no remote servers.
-- Settings live in `chrome.storage.sync` (Chrome) or `localStorage` (iOS PWA).
-- Stats live in `chrome.storage.local` (Chrome) or `localStorage` (iOS PWA).
-- Network blocking is done via Chrome’s `declarativeNetRequest` rulesets.
+## License
+
+MIT
