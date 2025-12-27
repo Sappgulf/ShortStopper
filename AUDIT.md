@@ -5,7 +5,7 @@
 This document summarizes the complete end-to-end audit of ShortStopper, a browser extension that blocks short-form video content and optional ads/trackers.
 
 **Audit Date**: December 26, 2025  
-**Version Audited**: 1.2.0 → 1.3.0  
+**Version Audited**: 1.2.0 → 1.3.1  
 **Auditor**: Security Review
 
 ---
