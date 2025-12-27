@@ -1,0 +1,273 @@
+[
+  {
+    "id": 2000,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||pagead2.googlesyndication.com^",
+      "resourceTypes": ["script", "sub_frame"]
+    }
+  },
+  {
+    "id": 2001,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||securepubads.g.doubleclick.net^",
+      "resourceTypes": ["script", "sub_frame"]
+    }
+  },
+  {
+    "id": 2002,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||tpc.googlesyndication.com^",
+      "resourceTypes": ["script", "sub_frame", "image"]
+    }
+  },
+  {
+    "id": 2003,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||partner.googleadservices.com^",
+      "resourceTypes": ["script", "image"]
+    }
+  },
+  {
+    "id": 2004,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||static.ads-twitter.com^",
+      "resourceTypes": ["script"]
+    }
+  },
+  {
+    "id": 2005,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||analytics.twitter.com^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2006,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||ads.linkedin.com^",
+      "resourceTypes": ["script", "image", "ping"]
+    }
+  },
+  {
+    "id": 2007,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||snap.licdn.com^",
+      "resourceTypes": ["script", "image"]
+    }
+  },
+  {
+    "id": 2008,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||px.ads.linkedin.com^",
+      "resourceTypes": ["image", "ping"]
+    }
+  },
+  {
+    "id": 2009,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||ads.pinterest.com^",
+      "resourceTypes": ["script", "image", "ping"]
+    }
+  },
+  {
+    "id": 2010,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||ct.pinterest.com^",
+      "resourceTypes": ["script", "image", "ping"]
+    }
+  },
+  {
+    "id": 2011,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||analytics.tiktok.com^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2012,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||ads.tiktok.com^",
+      "resourceTypes": ["script", "image", "ping"]
+    }
+  },
+  {
+    "id": 2013,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||sc-static.net/scevent.min.js",
+      "resourceTypes": ["script"]
+    }
+  },
+  {
+    "id": 2014,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||tr.snapchat.com^",
+      "resourceTypes": ["script", "image", "ping"]
+    }
+  },
+  {
+    "id": 2015,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "/ads.js",
+      "resourceTypes": ["script"]
+    }
+  },
+  {
+    "id": 2016,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "/advertisement",
+      "resourceTypes": ["script", "sub_frame"]
+    }
+  },
+  {
+    "id": 2017,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "/advert.",
+      "resourceTypes": ["script", "sub_frame"]
+    }
+  },
+  {
+    "id": 2018,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||clarity.ms^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2019,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||mouseflow.com^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2020,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||luckyorange.com^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2021,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||crazyegg.com^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2022,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||inspectlet.com^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2023,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||logrocket.com^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2024,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||heap-analytics.com^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2025,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||amplitude.com^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2026,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||plausible.io^",
+      "resourceTypes": ["script", "ping"]
+    }
+  },
+  {
+    "id": 2027,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||intercom.io^",
+      "resourceTypes": ["script"]
+    }
+  },
+  {
+    "id": 2028,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||drift.com^",
+      "resourceTypes": ["script"]
+    }
+  },
+  {
+    "id": 2029,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "urlFilter": "||zdassets.com^",
+      "resourceTypes": ["script"]
+    }
+  }
+]
+

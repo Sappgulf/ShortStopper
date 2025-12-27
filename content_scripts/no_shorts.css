@@ -1,3 +1,0 @@
-/* Legacy entrypoint (pre-refactor). The extension now runs from `adapters/chrome/*`. */
-@import url("../adapters/chrome/no_shorts.css");
-

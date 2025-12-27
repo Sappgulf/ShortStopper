@@ -1,4 +1,13 @@
-/* The content script toggles these root flags; CSS only acts when enabled. */
+/* ============================================================================
+   ShortStopper CSS - Cosmetic Filtering
+   ============================================================================
+   The content script toggles root flags; CSS only acts when flags are set.
+   This approach is performant and doesn't require JavaScript for hiding.
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   Pre-block: Hide page while deciding whether to redirect
+   ---------------------------------------------------------------------------- */
 :root[data-ns-preblock="true"] {
   background: Canvas !important;
 }
@@ -6,6 +15,11 @@
   display: none !important;
 }
 
+/* ============================================================================
+   YOUTUBE - Short-form content hiding
+   ============================================================================ */
+
+/* Hide Shorts shelves and items */
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-shelf-renderer[is-shorts],
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-reel-shelf-renderer,
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-reel-item-renderer,
@@ -16,14 +30,14 @@
   display: none !important;
 }
 
-/* Hide feed entry links, but allow direct Shorts URLs. */
+/* Hide Shorts links in navigation */
 :root[data-ns-enabled="true"][data-ns-hide-links="true"] a[href="/shorts"],
 :root[data-ns-enabled="true"][data-ns-hide-links="true"] a[href^="/shorts?"],
 :root[data-ns-enabled="true"][data-ns-hide-links="true"] a[href^="/feed/shorts"] {
   display: none !important;
 }
 
-/* Hide “Shorts” in the left guide by URL (language-proof). */
+/* Hide Shorts in sidebar navigation */
 :root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-guide-entry-renderer a[href^="/shorts"],
 :root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-guide-entry-renderer a[href^="/feed/shorts"],
 :root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-mini-guide-entry-renderer a[href^="/feed/shorts"],
@@ -31,13 +45,17 @@
   display: none !important;
 }
 
-/* Hide channel "Shorts" tab by URL. */
+/* Hide channel Shorts tab */
 :root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] a[title][href$="/shorts"],
-:root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] a[href*="/shorts"] {
+:root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] yt-tab-shape[tab-title="Shorts"],
+:root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] tp-yt-paper-tab:has(a[href*="/shorts"]) {
   display: none !important;
 }
 
-/* Instagram: hide Reels navigation entry. */
+/* ============================================================================
+   INSTAGRAM - Reels hiding
+   ============================================================================ */
+
 :root[data-ns-enabled="true"][data-ns-site="instagram"][data-ns-hide-sidebar="true"] nav a[href^="/reels"],
 :root[data-ns-enabled="true"][data-ns-site="instagram"][data-ns-hide-sidebar="true"] nav a[href^="/reel/"],
 :root[data-ns-enabled="true"][data-ns-site="instagram"][data-ns-hide-sidebar="true"] nav a[href*="instagram.com/reels"],
@@ -45,26 +63,58 @@
   display: none !important;
 }
 
-/* Facebook: hide Reels navigation entry. */
+/* Hide Reels in explore grid */
+:root[data-ns-enabled="true"][data-ns-site="instagram"][data-ns-hide-shelves="true"] article a[href^="/reel/"],
+:root[data-ns-enabled="true"][data-ns-site="instagram"][data-ns-hide-shelves="true"] div[role="presentation"] a[href^="/reel/"] {
+  display: none !important;
+}
+
+/* ============================================================================
+   FACEBOOK - Reels hiding
+   ============================================================================ */
+
 :root[data-ns-enabled="true"][data-ns-site="facebook"][data-ns-hide-sidebar="true"] div[role="navigation"] a[href*="/reels"],
 :root[data-ns-enabled="true"][data-ns-site="facebook"][data-ns-hide-sidebar="true"] div[role="navigation"] a[href*="/reel/"],
 :root[data-ns-enabled="true"][data-ns-site="facebook"][data-ns-hide-sidebar="true"] div[role="navigation"] a[href*="/watch/reels"] {
   display: none !important;
 }
 
-/* Snapchat: hide Spotlight navigation entry. */
+/* Hide Reels in feed */
+:root[data-ns-enabled="true"][data-ns-site="facebook"][data-ns-hide-shelves="true"] div[role="article"]:has(a[href*="/reel/"]) {
+  display: none !important;
+}
+
+/* ============================================================================
+   SNAPCHAT - Spotlight hiding
+   ============================================================================ */
+
 :root[data-ns-enabled="true"][data-ns-site="snapchat"][data-ns-hide-sidebar="true"] nav a[href*="/spotlight"],
 :root[data-ns-enabled="true"][data-ns-site="snapchat"][data-ns-hide-sidebar="true"] div[role="navigation"] a[href*="/spotlight"] {
   display: none !important;
 }
 
-/* Pinterest: hide Watch navigation entry. */
+/* ============================================================================
+   PINTEREST - Watch hiding
+   ============================================================================ */
+
 :root[data-ns-enabled="true"][data-ns-site="pinterest"][data-ns-hide-sidebar="true"] nav a[href^="/watch"],
 :root[data-ns-enabled="true"][data-ns-site="pinterest"][data-ns-hide-sidebar="true"] nav a[href*="pinterest.com/watch"] {
   display: none !important;
 }
 
-/* YouTube: hide sponsored cards/slots when adblock is enabled. */
+/* ============================================================================
+   TIKTOK - Short-form content hiding
+   ============================================================================ */
+
+:root[data-ns-enabled="true"][data-ns-site="tiktok"][data-ns-hide-sidebar="true"] a[href*="/foryou"],
+:root[data-ns-enabled="true"][data-ns-site="tiktok"][data-ns-hide-sidebar="true"] a[href*="/fyp"] {
+  display: none !important;
+}
+
+/* ============================================================================
+   ADBLOCK - YouTube sponsored content
+   ============================================================================ */
+
 :root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-display-ad-renderer,
 :root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-promoted-video-renderer,
 :root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-promoted-sparkles-text-search-renderer,
@@ -78,6 +128,77 @@
 :root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-video-masthead-ad-primary-video-renderer,
 :root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-compact-promoted-video-renderer,
 :root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-compact-promoted-item-renderer,
-:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-carousel-ad-renderer {
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-carousel-ad-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-banner-promo-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-statement-banner-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-mealbar-promo-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] .ytd-merch-shelf-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-merch-shelf-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] #masthead-ad,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] #player-ads,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] .video-ads,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] .ytp-ad-module {
   display: none !important;
+}
+
+/* YouTube Premium prompts */
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-popup-container tp-yt-paper-dialog:has(yt-premium-logo),
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-enforcement-message-view-model,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] .ytd-popup-container:has([class*="premium"]) {
+  display: none !important;
+}
+
+/* ============================================================================
+   ADBLOCK - Instagram sponsored content
+   ============================================================================ */
+
+:root[data-ns-adblock="true"][data-ns-site="instagram"] article:has(span:contains("Sponsored")),
+:root[data-ns-adblock="true"][data-ns-site="instagram"] div[role="presentation"]:has(span:contains("Sponsored")) {
+  opacity: 0.3 !important;
+  pointer-events: none !important;
+}
+
+/* ============================================================================
+   ADBLOCK - Facebook sponsored content
+   ============================================================================ */
+
+:root[data-ns-adblock="true"][data-ns-site="facebook"] div[role="article"]:has(span:contains("Sponsored")),
+:root[data-ns-adblock="true"][data-ns-site="facebook"] div[role="article"]:has(a[href*="ads"]) {
+  opacity: 0.3 !important;
+  pointer-events: none !important;
+}
+
+/* ============================================================================
+   GENERIC ADBLOCK - Common ad patterns (when on supported sites)
+   ============================================================================ */
+
+:root[data-ns-adblock="true"] [id*="google_ads"],
+:root[data-ns-adblock="true"] [class*="google-ad"],
+:root[data-ns-adblock="true"] [class*="GoogleAd"],
+:root[data-ns-adblock="true"] [id*="AdSlot"],
+:root[data-ns-adblock="true"] [class*="ad-container"],
+:root[data-ns-adblock="true"] [class*="ad-wrapper"],
+:root[data-ns-adblock="true"] [class*="ad-banner"],
+:root[data-ns-adblock="true"] [data-ad],
+:root[data-ns-adblock="true"] [data-ad-slot],
+:root[data-ns-adblock="true"] ins.adsbygoogle,
+:root[data-ns-adblock="true"] .adsbygoogle {
+  display: none !important;
+}
+
+/* Overlay/popup ads */
+:root[data-ns-adblock="true"] [class*="overlay-ad"],
+:root[data-ns-adblock="true"] [class*="popup-ad"],
+:root[data-ns-adblock="true"] [class*="interstitial"],
+:root[data-ns-adblock="true"] [id*="interstitial"] {
+  display: none !important;
+}
+
+/* Cookie consent overlays (optional - reduces annoyance) */
+:root[data-ns-adblock="true"] [class*="cookie-consent"],
+:root[data-ns-adblock="true"] [class*="cookie-banner"],
+:root[data-ns-adblock="true"] [id*="cookie-consent"],
+:root[data-ns-adblock="true"] [id*="cookieBanner"] {
+  /* Note: Not hiding by default as these may be legally required */
+  /* Uncomment to hide: display: none !important; */
 }

@@ -2,9 +2,9 @@ import { DEFAULT_SETTINGS } from "../../storage/settings.js";
 import { channelKeyFromDom, channelKeyFromUrl, shouldAttemptDomChannelKey } from "../../runtime/channel.js";
 import { createDebounced, hookSpaNavigation, watchUrlChanges } from "../../runtime/navigation.js";
 import { createRouteCache } from "../../runtime/route_cache.js";
-import { createBlockGate } from "../../runtime/session_state.js";
+import { createBlockGate, createBypassManager } from "../../runtime/session_state.js";
 import { debugLog } from "../../runtime/debug.js";
-import { resolveRoutePolicy, shouldBlockRoute } from "../../policy/decision.js";
+import { resolveRoutePolicy, shouldBlockRoute, isSafeRedirectTarget } from "../../policy/decision.js";
 import { getSiteConfig, siteFromHost } from "../../policy/shortform.js";
 import { isSiteEnabled, resolveEffectiveSettings } from "../../policy/settings_policy.js";
 import { hardHidePage, unhidePage } from "../../ui/page_visibility.js";
@@ -17,6 +17,10 @@ import {
 } from "../../platform/chrome.js";
 import { CONTENT_MESSAGE_TYPES, getMessageType } from "../../platform/messages.js";
 import { getSettings } from "./storage.js";
+
+// ============================================================================
+// CONSTANTS
+// ============================================================================
 
 const SITE_LINK_SELECTORS = {
   youtube: [
@@ -40,7 +44,8 @@ const SITE_LINK_SELECTORS = {
     'a[href*="facebook.com/watch/reels"]'
   ],
   snapchat: ['a[href^="/spotlight"]', 'a[href*="snapchat.com/spotlight"]'],
-  pinterest: ['a[href^="/watch"]', 'a[href*="pinterest.com/watch"]']
+  pinterest: ['a[href^="/watch"]', 'a[href*="pinterest.com/watch"]'],
+  tiktok: [] // TikTok links are handled differently
 };
 
 const SITE_CARD_SELECTORS = {
@@ -97,9 +102,29 @@ const NAV_LABEL_RULES = {
 
 const ROUTE_DEBOUNCE_MS = 90;
 const BLOCK_REPEAT_MS = 900;
+const MUTATION_BATCH_MS = 50;
+
+// ============================================================================
+// STATE
+// ============================================================================
 
 const blockGate = createBlockGate(BLOCK_REPEAT_MS);
+const bypassManager = createBypassManager();
 const routeCache = createRouteCache({ ttlMs: 1500, maxEntries: 48 });
+
+let settings = { ...DEFAULT_SETTINGS };
+let effective = null;
+let navToken = 0;
+let linkObserver = null;
+let scheduleRouteCheck = null;
+let lastVideoId = null;
+let lastVideoSite = null;
+let pendingMutations = [];
+let mutationFlushTimer = null;
+
+// ============================================================================
+// HELPERS
+// ============================================================================
 
 function getSiteId() {
   return siteFromHost(location.hostname);
@@ -142,12 +167,52 @@ function getPolicyForUrl(siteId, url, pathname) {
   return policy;
 }
 
+// ============================================================================
+// LINK HIDING (Batched)
+// ============================================================================
+
+function processMutationBatch() {
+  if (!pendingMutations.length) return;
+  if (!effective?.enabled) {
+    pendingMutations.length = 0;
+    return;
+  }
+
+  const canHideLinks = !!effective.hideLinks;
+  const canRename = !!NAV_LABEL_RULES[effective.__siteId];
+
+  if (!canHideLinks && !canRename) {
+    pendingMutations.length = 0;
+    return;
+  }
+
+  // Dedupe nodes
+  const nodes = new Set();
+  for (const node of pendingMutations) {
+    if (node instanceof HTMLElement) nodes.add(node);
+  }
+  pendingMutations.length = 0;
+
+  for (const node of nodes) {
+    if (canHideLinks) hideShortFormLinksOnce(node, effective);
+    if (canRename) renameShortFormLabelsOnce(node, effective);
+  }
+}
+
+function scheduleMutationFlush() {
+  if (mutationFlushTimer) return;
+  mutationFlushTimer = setTimeout(() => {
+    mutationFlushTimer = null;
+    processMutationBatch();
+  }, MUTATION_BATCH_MS);
+}
+
 function hideShortFormLinksOnce(rootEl, effective) {
   if (!effective.enabled || !effective.hideLinks) return;
 
   const siteId = effective.__siteId;
   const selectors = SITE_LINK_SELECTORS[siteId];
-  if (!selectors) return;
+  if (!selectors || !selectors.length) return;
 
   const links = rootEl.querySelectorAll?.(selectors.join(",")) || [];
   if (!links.length) return;
@@ -255,13 +320,9 @@ function renameShortFormLabelsOnce(rootEl, effective) {
   });
 }
 
-let settings = { ...DEFAULT_SETTINGS };
-let effective = null;
-let navToken = 0;
-let linkObserver = null;
-let scheduleRouteCheck = null;
-let lastVideoId = null;
-let lastVideoSite = null;
+// ============================================================================
+// VIDEO CONTEXT (for adblock insights)
+// ============================================================================
 
 function getYouTubeVideoContext() {
   if (location.pathname !== "/watch") return { videoId: null, title: null };
@@ -289,6 +350,10 @@ function updateVideoContext(siteId) {
   sendRuntimeMessage({ type: "ns.updateVideoContext", siteId, videoId: ctx.videoId, title: ctx.title });
 }
 
+// ============================================================================
+// MUTATION OBSERVER
+// ============================================================================
+
 function setObserverActive(active) {
   if (!active) {
     if (linkObserver) {
@@ -299,28 +364,47 @@ function setObserverActive(active) {
   }
 
   if (linkObserver) return;
+  
   linkObserver = new MutationObserver((mutations) => {
-    const canHideLinks = !!effective?.enabled && !!effective.hideLinks;
-    const canRename = !!effective?.enabled && !!NAV_LABEL_RULES[effective.__siteId];
-    if (!canHideLinks && !canRename) return;
     for (const m of mutations) {
       for (const node of m.addedNodes) {
-        if (!(node instanceof HTMLElement)) continue;
-        if (canHideLinks) hideShortFormLinksOnce(node, effective);
-        if (canRename) renameShortFormLabelsOnce(node, effective);
+        if (node instanceof HTMLElement) {
+          pendingMutations.push(node);
+        }
       }
     }
+    if (pendingMutations.length > 0) {
+      scheduleMutationFlush();
+    }
   });
-  linkObserver.observe(document.documentElement, { childList: true, subtree: true });
+  
+  // Observe body instead of documentElement for better performance
+  const target = document.body || document.documentElement;
+  linkObserver.observe(target, { childList: true, subtree: true });
 }
+
+// ============================================================================
+// MAIN APPLY LOGIC
+// ============================================================================
 
 async function applyAll() {
   const token = ++navToken;
   const siteId = getSiteId();
+  
   if (!siteId) {
     effective = null;
     setObserverActive(false);
     unhidePage();
+    return;
+  }
+
+  // Check bypass first
+  if (bypassManager.isActive(siteId)) {
+    effective = { enabled: false, __siteId: siteId, __bypassed: true };
+    setRootFlags(effective);
+    setObserverActive(false);
+    unhidePage();
+    debugLog("bypassed", { siteId, remaining: bypassManager.getRemainingMs(siteId) });
     return;
   }
 
@@ -346,10 +430,29 @@ async function applyAll() {
     return;
   }
 
-  const decision = shouldBlockRoute(effective, policy, siteId);
+  const decision = shouldBlockRoute(effective, policy, siteId, location.href);
+  
   if (decision.block) {
-    const site = getSiteConfig(siteId);
-    const homeUrl = site?.home ? new URL(site.home, location.origin).href : `${location.origin}/`;
+    // Determine redirect target
+    let redirectUrl = decision.redirectUrl;
+    
+    // If no conversion URL, fall back to site home
+    if (!redirectUrl) {
+      const site = getSiteConfig(siteId);
+      redirectUrl = site?.home ? new URL(site.home, location.origin).href : `${location.origin}/`;
+    }
+
+    // Verify the redirect target is safe
+    if (!isSafeRedirectTarget(siteId, redirectUrl)) {
+      redirectUrl = `${location.origin}/`;
+    }
+
+    // Check redirect loop protection
+    if (!blockGate.canRedirect(location.href, redirectUrl)) {
+      debugLog("redirect_blocked", { reason: "loop_protection", from: location.href, to: redirectUrl });
+      unhidePage();
+      return;
+    }
 
     hardHidePage();
     setObserverActive(false);
@@ -358,10 +461,10 @@ async function applyAll() {
       bumpBlocked(1, effective.__statsKey || null);
     }
 
-    debugLog("blocked", { siteId, reason: decision.reason, url: location.href });
+    debugLog("blocked", { siteId, reason: decision.reason, url: location.href, redirectTo: redirectUrl });
 
-    if (location.href !== homeUrl) {
-      location.replace(homeUrl);
+    if (location.href !== redirectUrl) {
+      location.replace(redirectUrl);
     } else {
       unhidePage();
     }
@@ -376,11 +479,30 @@ async function applyAll() {
   debugLog("allowed", { siteId, reason: decision.reason, url: location.href });
 }
 
+// ============================================================================
+// BYPASS CONTROLS
+// ============================================================================
+
+function enableBypass(siteId, durationMs = 10 * 60 * 1000) {
+  bypassManager.enable(siteId, durationMs);
+  blockGate.clearHistory();
+  applyAll();
+}
+
+function disableBypass(siteId) {
+  bypassManager.disable(siteId);
+  applyAll();
+}
+
+// ============================================================================
+// ENTRY POINT
+// ============================================================================
+
 export async function start() {
   const siteId = getSiteId();
   if (siteId) {
     const policy = getPolicyForUrl(siteId, location.href, location.pathname);
-    if (policy.action === "block") {
+    if (policy.action === "block" && !bypassManager.isActive(siteId)) {
       hardHidePage();
     }
   }
@@ -423,6 +545,29 @@ export async function start() {
       if (type === "ns.reapply") {
         await applyAll();
         sendResponse({ ok: true });
+        return;
+      }
+
+      if (type === "ns.enableBypass") {
+        const duration = typeof msg.duration === "number" ? msg.duration : 10 * 60 * 1000;
+        enableBypass(getSiteId(), duration);
+        sendResponse({ ok: true });
+        return;
+      }
+
+      if (type === "ns.disableBypass") {
+        disableBypass(getSiteId());
+        sendResponse({ ok: true });
+        return;
+      }
+
+      if (type === "ns.getBypassStatus") {
+        const siteId = getSiteId();
+        sendResponse({
+          ok: true,
+          active: bypassManager.isActive(siteId),
+          remainingMs: bypassManager.getRemainingMs(siteId)
+        });
         return;
       }
     })();

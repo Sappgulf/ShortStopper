@@ -2,7 +2,7 @@ import { classifyRoute } from "./route_policy.js";
 import { parseShortFormPath } from "./shortform.js";
 
 /**
- * @typedef {{ action: "allow" | "block" | "unknown", reason: string, isFeed?: boolean }} RoutePolicy
+ * @typedef {{ action: "allow" | "block" | "unknown", reason: string, isFeed?: boolean, convertUrl?: string }} RoutePolicy
  */
 
 /**
@@ -24,11 +24,17 @@ export function resolveRoutePolicy(siteId, url, pathname) {
 }
 
 /**
+ * @typedef {{ block: boolean, reason: string, redirectUrl?: string }} BlockDecision
+ */
+
+/**
  * @param {import("../storage/settings.js").Settings & { __redirectEnabled?: boolean, enabled?: boolean, strictRedirect?: boolean, whitelistMode?: boolean }} effective
  * @param {RoutePolicy} policy
  * @param {string} siteId
+ * @param {string} currentUrl
+ * @returns {BlockDecision}
  */
-export function shouldBlockRoute(effective, policy, siteId) {
+export function shouldBlockRoute(effective, policy, siteId, currentUrl) {
   if (!effective?.enabled) return { block: false, reason: "disabled" };
   if (!effective.redirectShorts) return { block: false, reason: "redirect_off" };
   if (policy.action !== "block") return { block: false, reason: "allowed" };
@@ -39,5 +45,36 @@ export function shouldBlockRoute(effective, policy, siteId) {
   }
   if (!canBlockByMode) return { block: false, reason: "mode_off" };
 
-  return { block: true, reason: policy.reason || "blocked" };
+  // Determine redirect URL
+  let redirectUrl = null;
+  
+  // If we have a convertUrl (e.g., Shorts -> Watch), use that
+  if (policy.convertUrl) {
+    try {
+      redirectUrl = new URL(policy.convertUrl, currentUrl).href;
+    } catch {
+      redirectUrl = null;
+    }
+  }
+
+  return { 
+    block: true, 
+    reason: policy.reason || "blocked",
+    redirectUrl
+  };
+}
+
+/**
+ * Check if a URL is a safe redirect target (won't cause loops)
+ * @param {string} siteId
+ * @param {string} targetUrl
+ * @returns {boolean}
+ */
+export function isSafeRedirectTarget(siteId, targetUrl) {
+  try {
+    const policy = classifyRoute(siteId, targetUrl);
+    return policy.action !== "block";
+  } catch {
+    return false;
+  }
 }

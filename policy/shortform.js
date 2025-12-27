@@ -6,7 +6,6 @@ import { parseShortsPath } from "./shorts.js";
  * @property {string} label
  * @property {string} home
  * @property {string[]} domains
- * @property {boolean} [blockAll]
  */
 
 function hostMatches(host, domain) {
@@ -25,6 +24,7 @@ function parseInstagramPath(pathname) {
 
   if (parts[0] === "reels") return { isShortForm: true, id: null, kind: "reels_feed" };
   if (parts[0] === "reel") return { isShortForm: true, id: parts[1] || null, kind: "reel" };
+  if (parts[0] === "explore" && parts[1] === "reels") return { isShortForm: true, id: null, kind: "explore_reels" };
   return { isShortForm: false, id: null, kind: "" };
 }
 
@@ -39,6 +39,38 @@ function parseFacebookPath(pathname) {
     return { isShortForm: true, id: parts[2] || null, kind: "watch_reels" };
   }
   return { isShortForm: false, id: null, kind: "" };
+}
+
+function parseTikTokPath(pathname) {
+  const p = normalizePath(pathname);
+  const parts = p.split("/").filter(Boolean);
+  if (!parts.length) return { isShortForm: false, id: null, kind: "" };
+
+  // FYP is short-form
+  if (parts[0] === "foryou" || parts[0] === "fyp") {
+    return { isShortForm: true, id: null, kind: "fyp" };
+  }
+  
+  // Individual videos are short-form
+  if (parts[0]?.startsWith("@") && parts[1] === "video") {
+    return { isShortForm: true, id: parts[2] || null, kind: "video" };
+  }
+  
+  // Explore/discover
+  if (parts[0] === "explore" || parts[0] === "discover") {
+    return { isShortForm: true, id: null, kind: "explore" };
+  }
+  
+  // Profile pages, search, settings are NOT short-form
+  if (parts[0]?.startsWith("@") && !parts[1]) {
+    return { isShortForm: false, id: null, kind: "" };
+  }
+  if (parts[0] === "search" || parts[0] === "setting" || parts[0] === "login" || parts[0] === "signup") {
+    return { isShortForm: false, id: null, kind: "" };
+  }
+
+  // Default: treat as short-form (TikTok is primarily short-form)
+  return { isShortForm: true, id: null, kind: "default" };
 }
 
 function parseSnapchatPath(pathname) {
@@ -83,8 +115,7 @@ export const SHORTFORM_SITES = {
     id: "tiktok",
     label: "TikTok",
     home: "https://www.tiktok.com/",
-    domains: ["tiktok.com"],
-    blockAll: true
+    domains: ["tiktok.com"]
   },
   snapchat: {
     id: "snapchat",
@@ -126,7 +157,7 @@ export function parseShortFormPath(siteId, pathname) {
     case "facebook":
       return parseFacebookPath(pathname);
     case "tiktok":
-      return { isShortForm: true, id: null, kind: "tiktok" };
+      return parseTikTokPath(pathname);
     case "snapchat":
       return parseSnapchatPath(pathname);
     case "pinterest":

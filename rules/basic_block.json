@@ -308,5 +308,195 @@
       "regexFilter": "^https?://([^/]+\\.)?optimizely\\.com/",
       "resourceTypes": ["script", "xmlhttprequest", "ping", "other"]
     }
+  },
+  {
+    "id": 1032,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?amazon-adsystem\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame", "ping", "other"]
+    }
+  },
+  {
+    "id": 1033,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?moatads\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 1034,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?pubmatic\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame", "ping", "other"]
+    }
+  },
+  {
+    "id": 1035,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?casalemedia\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame", "ping", "other"]
+    }
+  },
+  {
+    "id": 1036,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?indexww\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame", "ping", "other"]
+    }
+  },
+  {
+    "id": 1037,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?bidswitch\\.net/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame", "ping", "other"]
+    }
+  },
+  {
+    "id": 1038,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?33across\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame", "ping", "other"]
+    }
+  },
+  {
+    "id": 1039,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?sharethrough\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame", "ping", "other"]
+    }
+  },
+  {
+    "id": 1040,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?advertising\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame", "ping", "other"]
+    }
+  },
+  {
+    "id": 1041,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?adsafeprotected\\.com/",
+      "resourceTypes": ["script", "xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 1042,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?demdex\\.net/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 1043,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?omtrdc\\.net/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 1044,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?mookie1\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "sub_frame", "ping", "other"]
+    }
+  },
+  {
+    "id": 1045,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?exelator\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 1046,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?bluekai\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 1047,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?liveramp\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 1048,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?rlcdn\\.com/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 1049,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?krxd\\.net/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "ping", "other"]
+    }
+  },
+  {
+    "id": 1050,
+    "priority": 1,
+    "action": { "type": "block" },
+    "condition": {
+      "domainType": "thirdParty",
+      "regexFilter": "^https?://([^/]+\\.)?eyeota\\.net/",
+      "resourceTypes": ["script", "image", "xmlhttprequest", "ping", "other"]
+    }
   }
 ]
