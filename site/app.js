@@ -1,6 +1,6 @@
 const CONFIG = {
   WEBSTORE_URL: "",
-  DOWNLOAD_ZIP_URL: "https://github.com/Sappgulf/ShortStopper/releases/latest/download/ShortStopper-chrome.zip",
+  DOWNLOAD_ZIP_URL: "https://github.com/Sappgulf/ShortStopper/archive/refs/heads/main.zip",
   SOURCE_URL: "https://github.com/Sappgulf/ShortStopper"
 };
 
