@@ -26,7 +26,12 @@
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-item-renderer[is-shorts],
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-item-renderer[is-shorts-grid],
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-video-renderer[is-shorts],
-:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-grid-video-renderer[is-shorts] {
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-grid-video-renderer[is-shorts],
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]),
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-section-renderer:has(ytd-reel-shelf-renderer),
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] [is-shorts],
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-shorts,
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-shorts-video-renderer {
   display: none !important;
 }
 
@@ -38,17 +43,22 @@
 }
 
 /* Hide Shorts in sidebar navigation */
-:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-guide-entry-renderer a[href^="/shorts"],
-:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-guide-entry-renderer a[href^="/feed/shorts"],
-:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-mini-guide-entry-renderer a[href^="/feed/shorts"],
-:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-mini-guide-entry-renderer a[href^="/shorts"] {
+:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-guide-entry-renderer:has(a[href^="/shorts"]),
+:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-guide-entry-renderer:has(a[href^="/feed/shorts"]),
+:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-mini-guide-entry-renderer:has(a[href^="/feed/shorts"]),
+:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-mini-guide-entry-renderer:has(a[href^="/shorts"]),
+:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] ytd-guide-section-renderer:has(a[href*="/shorts"]),
+:root[data-ns-enabled="true"][data-ns-hide-sidebar="true"] tp-yt-paper-item:has(a[href*="/shorts"]) {
   display: none !important;
 }
 
 /* Hide channel Shorts tab */
 :root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] a[title][href$="/shorts"],
 :root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] yt-tab-shape[tab-title="Shorts"],
-:root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] tp-yt-paper-tab:has(a[href*="/shorts"]) {
+:root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] tp-yt-paper-tab:has(a[href*="/shorts"]),
+:root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] yt-tab-group-shape yt-tab-shape:has([href*="/shorts"]),
+:root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] [role="tab"]:has(a[href*="/shorts"]),
+:root[data-ns-enabled="true"][data-ns-hide-channel-tab="true"] .yt-tab-shape-wiz[tab-title="Shorts"] {
   display: none !important;
 }
 

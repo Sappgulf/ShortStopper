@@ -15,9 +15,26 @@ export function hookSpaNavigation(onNav) {
   };
 
   window.addEventListener("popstate", onNav);
+  
+  // YouTube-specific navigation events
   window.addEventListener("yt-navigate-start", onNav, true);
   window.addEventListener("yt-navigate-finish", onNav, true);
   window.addEventListener("yt-page-data-updated", onNav, true);
+  window.addEventListener("yt-navigate", onNav, true);
+  window.addEventListener("yt-action", (e) => {
+    // Catch navigation actions
+    const detail = e.detail;
+    if (detail?.actionName === "yt-navigate-action" || 
+        detail?.actionName === "yt-history-load") {
+      onNav();
+    }
+  }, true);
+  
+  // Instagram/Facebook SPA events
+  window.addEventListener("locationchange", onNav, true);
+  
+  // Generic hashchange
+  window.addEventListener("hashchange", onNav, true);
 }
 
 /**

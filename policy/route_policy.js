@@ -22,10 +22,10 @@ function hasPrefix(pathname, prefix) {
  * @returns {string | null}
  */
 function extractShortsVideoId(pathname) {
-  const parts = splitPath(pathname);
-  if (parts[0] === "shorts" && parts[1]) {
+  const rawParts = normalizePath(pathname).split("/").filter(Boolean);
+  if (rawParts[0]?.toLowerCase() === "shorts" && rawParts[1]) {
     // /shorts/VIDEO_ID or /shorts/VIDEO_ID?...
-    const videoId = parts[1].split("?")[0].split("#")[0];
+    const videoId = rawParts[1].split("?")[0].split("#")[0];
     // YouTube video IDs are 11 characters, alphanumeric with - and _
     if (/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
       return videoId;

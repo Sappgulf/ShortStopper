@@ -8,6 +8,7 @@ import { resolveRoutePolicy, shouldBlockRoute, isSafeRedirectTarget } from "../.
 import { getSiteConfig, siteFromHost } from "../../policy/shortform.js";
 import { isSiteEnabled, resolveEffectiveSettings } from "../../policy/settings_policy.js";
 import { hardHidePage, unhidePage } from "../../ui/page_visibility.js";
+import { clearBlockOverlay, showBlockOverlay } from "../../ui/overlay.js";
 import { setRootFlags } from "../../ui/root_flags.js";
 import {
   addRuntimeMessageListener,
@@ -59,7 +60,12 @@ const NAV_LABEL_RULES = {
   youtube: {
     label: "Shorts",
     replacement: SHORTS_LABEL_REPLACEMENT,
-    entrySelectors: ["ytd-guide-entry-renderer", "ytd-mini-guide-entry-renderer"],
+    entrySelectors: [
+      "ytd-guide-entry-renderer",
+      "ytd-mini-guide-entry-renderer",
+      "ytd-guide-section-renderer",
+      "tp-yt-paper-item"
+    ],
     hrefIncludes: ["/shorts", "/feed/shorts"]
   },
   instagram: {
@@ -261,30 +267,85 @@ function replaceLabelText(root, label, replacement) {
   const target = String(label || "").trim().toLowerCase();
   const replacementText = String(replacement || "");
 
+  // Check aria-label on root
   const aria = root.getAttribute("aria-label");
   if (aria && aria.trim().toLowerCase() === target) {
     root.setAttribute("aria-label", replacementText);
     did = true;
   }
 
-  const anchor = root.tagName === "A" ? root : root.querySelector("a");
-  const anchorAria = anchor?.getAttribute("aria-label");
-  if (anchorAria && anchorAria.trim().toLowerCase() === target) {
-    anchor.setAttribute("aria-label", replacementText);
+  // Check title attribute
+  const title = root.getAttribute("title");
+  if (title && title.trim().toLowerCase() === target) {
+    root.setAttribute("title", replacementText);
     did = true;
   }
 
-  const nodes = root.querySelectorAll("yt-formatted-string, span, div, p, a");
-  nodes.forEach((node) => {
-    const text = node.textContent ? node.textContent.trim() : "";
-    if (text && text.toLowerCase() === target) {
-      node.textContent = replacementText;
+  // Check anchor elements
+  const anchor = root.tagName === "A" ? root : root.querySelector("a");
+  if (anchor) {
+    const anchorAria = anchor.getAttribute("aria-label");
+    if (anchorAria && anchorAria.trim().toLowerCase() === target) {
+      anchor.setAttribute("aria-label", replacementText);
       did = true;
+    }
+    const anchorTitle = anchor.getAttribute("title");
+    if (anchorTitle && anchorTitle.trim().toLowerCase() === target) {
+      anchor.setAttribute("title", replacementText);
+      did = true;
+    }
+  }
+
+  // Check text nodes in common elements - be more thorough
+  const textSelectors = [
+    "yt-formatted-string",
+    "span",
+    "div",
+    "p",
+    "a",
+    "yt-icon-shape + span", // YouTube's new icon+label pattern
+    "[class*='title']",
+    "[class*='label']"
+  ];
+  const nodes = root.querySelectorAll(textSelectors.join(","));
+  nodes.forEach((node) => {
+    // Only replace if this node's direct text content matches
+    // Avoid replacing parent nodes that contain matching children
+    const directText = getDirectTextContent(node);
+    if (directText && directText.toLowerCase() === target) {
+      // Replace only the text node, not child elements
+      for (const child of node.childNodes) {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const trimmed = child.textContent?.trim().toLowerCase();
+          if (trimmed === target) {
+            child.textContent = replacementText;
+            did = true;
+          }
+        }
+      }
+    }
+    // Fallback: if no text nodes but textContent matches
+    if (!did) {
+      const text = node.textContent ? node.textContent.trim() : "";
+      if (text && text.toLowerCase() === target && node.children.length === 0) {
+        node.textContent = replacementText;
+        did = true;
+      }
     }
   });
 
   if (did) root.dataset.nsRenamed = "1";
   return did;
+}
+
+function getDirectTextContent(node) {
+  let text = "";
+  for (const child of node.childNodes) {
+    if (child.nodeType === Node.TEXT_NODE) {
+      text += child.textContent || "";
+    }
+  }
+  return text.trim();
 }
 
 function renameShortFormLabelsOnce(rootEl, effective) {
@@ -387,6 +448,26 @@ function setObserverActive(active) {
 // MAIN APPLY LOGIC
 // ============================================================================
 
+function showBlockedOverlay(siteId) {
+  const label = getSiteConfig(siteId)?.label || "Short-form";
+  showBlockOverlay({
+    label,
+    onBack: () => {
+      try {
+        history.back();
+      } catch {
+        location.href = `${location.origin}/`;
+      }
+    },
+    onAllowOnce: () => {
+      enableBypass(siteId);
+    },
+    onOptions: () => {
+      sendRuntimeMessage({ type: "ns.openOptions" });
+    }
+  });
+}
+
 async function applyAll() {
   const token = ++navToken;
   const siteId = getSiteId();
@@ -394,6 +475,7 @@ async function applyAll() {
   if (!siteId) {
     effective = null;
     setObserverActive(false);
+    clearBlockOverlay();
     unhidePage();
     return;
   }
@@ -403,6 +485,7 @@ async function applyAll() {
     effective = { enabled: false, __siteId: siteId, __bypassed: true };
     setRootFlags(effective);
     setObserverActive(false);
+    clearBlockOverlay();
     unhidePage();
     debugLog("bypassed", { siteId, remaining: bypassManager.getRemainingMs(siteId) });
     return;
@@ -424,8 +507,11 @@ async function applyAll() {
   const shouldUpdateVideoContext = settings.adblockInsights && settings.adBlockEnabled;
   if (shouldUpdateVideoContext) updateVideoContext(siteId);
 
+  renameShortFormLabelsOnce(document, effective);
+
   if (!effective.enabled) {
     setObserverActive(false);
+    clearBlockOverlay();
     unhidePage();
     return;
   }
@@ -435,7 +521,7 @@ async function applyAll() {
   if (decision.block) {
     // Determine redirect target
     let redirectUrl = decision.redirectUrl;
-    
+
     // If no conversion URL, fall back to site home
     if (!redirectUrl) {
       const site = getSiteConfig(siteId);
@@ -450,7 +536,9 @@ async function applyAll() {
     // Check redirect loop protection
     if (!blockGate.canRedirect(location.href, redirectUrl)) {
       debugLog("redirect_blocked", { reason: "loop_protection", from: location.href, to: redirectUrl });
-      unhidePage();
+      hardHidePage();
+      setObserverActive(false);
+      showBlockedOverlay(siteId);
       return;
     }
 
@@ -464,19 +552,73 @@ async function applyAll() {
     debugLog("blocked", { siteId, reason: decision.reason, url: location.href, redirectTo: redirectUrl });
 
     if (location.href !== redirectUrl) {
+      clearBlockOverlay();
       location.replace(redirectUrl);
     } else {
-      unhidePage();
+      showBlockedOverlay(siteId);
     }
     return;
   }
 
+  clearBlockOverlay();
   unhidePage();
-  renameShortFormLabelsOnce(document, effective);
   hideShortFormLinksOnce(document, effective);
   setObserverActive(!!effective.hideLinks || !!NAV_LABEL_RULES[effective.__siteId]);
 
   debugLog("allowed", { siteId, reason: decision.reason, url: location.href });
+}
+
+// ============================================================================
+// DELAYED LABEL RENAME (for async-loaded sidebars)
+// ============================================================================
+
+let labelRenameAttempts = 0;
+const MAX_LABEL_RENAME_ATTEMPTS = 10;
+const LABEL_RENAME_DELAYS = [100, 300, 500, 1000, 1500, 2000, 3000, 4000, 5000, 7000];
+
+function scheduleDelayedLabelRename() {
+  labelRenameAttempts = 0;
+  attemptLabelRename();
+}
+
+function attemptLabelRename() {
+  if (labelRenameAttempts >= MAX_LABEL_RENAME_ATTEMPTS) return;
+  if (!effective?.enabled) return;
+  
+  const delay = LABEL_RENAME_DELAYS[labelRenameAttempts] || 1000;
+  labelRenameAttempts++;
+  
+  setTimeout(() => {
+    if (!effective?.enabled) return;
+    
+    // Try to rename labels on the entire document
+    const siteId = effective.__siteId;
+    if (!siteId) return;
+    
+    const rule = NAV_LABEL_RULES[siteId];
+    if (!rule) return;
+    
+    let foundAny = false;
+    
+    // Check if sidebar is loaded
+    if (rule.entrySelectors?.length) {
+      const selector = rule.entrySelectors.join(",");
+      const entries = document.querySelectorAll(selector);
+      entries.forEach((entry) => {
+        if (entry.dataset.nsRenamed === "1") return;
+        const anchor = entry.querySelector?.("a[href]");
+        if (rule.hrefIncludes?.length && anchor && !anchorMatchesHref(anchor, rule.hrefIncludes)) return;
+        if (replaceLabelText(entry, rule.label, rule.replacement)) {
+          foundAny = true;
+        }
+      });
+    }
+    
+    // Continue trying if we haven't found/renamed anything yet
+    if (!foundAny && labelRenameAttempts < MAX_LABEL_RENAME_ATTEMPTS) {
+      attemptLabelRename();
+    }
+  }, delay);
 }
 
 // ============================================================================
@@ -518,6 +660,11 @@ export async function start() {
 
   hookSpaNavigation(scheduleRouteCheck);
   watchUrlChanges(scheduleRouteCheck);
+  
+  // YouTube loads sidebar asynchronously - schedule delayed label checks
+  if (siteId === "youtube") {
+    scheduleDelayedLabelRename();
+  }
 
   addStorageChangeListener(async (changes, area) => {
     if (area !== "sync") return;

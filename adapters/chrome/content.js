@@ -35,5 +35,38 @@
       } catch {
         // sessionStorage may not be available
       }
+      fallbackBlockShorts();
     });
 })();
+
+function fallbackBlockShorts() {
+  try {
+    const host = String(location.hostname || "");
+    if (!host.endsWith("youtube.com")) return;
+
+    const path = location.pathname || "/";
+    if (path.startsWith("/shorts") || path.startsWith("/feed/shorts")) {
+      location.replace(`${location.origin}/`);
+    }
+
+    const replaceLabel = () => {
+      const entries = document.querySelectorAll(
+        "ytd-guide-entry-renderer,ytd-mini-guide-entry-renderer"
+      );
+      entries.forEach((entry) => {
+        const anchor = entry.querySelector("a[href]");
+        const href = anchor?.getAttribute("href") || "";
+        if (!href.includes("/shorts") && !href.includes("/feed/shorts")) return;
+        const nodes = entry.querySelectorAll("yt-formatted-string, span, div");
+        nodes.forEach((node) => {
+          const text = node.textContent ? node.textContent.trim() : "";
+          if (text === "Shorts") node.textContent = "Slop";
+        });
+      });
+    };
+
+    replaceLabel();
+    const obs = new MutationObserver(() => replaceLabel());
+    obs.observe(document.documentElement, { childList: true, subtree: true });
+  } catch {}
+}
