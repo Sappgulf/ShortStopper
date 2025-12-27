@@ -4,67 +4,155 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="options.css" />
-  <title>No Shorts — Options</title>
+  <title>ShortStopper — Options</title>
 </head>
 <body>
   <main class="wrap">
     <header class="head">
-      <h1>No Shorts — Options</h1>
-      <a class="link" href="#" id="openStats">Open stats</a>
+      <div>
+        <div class="eyebrow">ShortStopper</div>
+        <h1>Options</h1>
+        <p class="intro muted">
+          Allowlist mode blocks Shorts everywhere except channels you add to the allowlist (YouTube only).
+          Per-channel modes override behavior on those pages. Strict redirect is fastest but cannot be per-channel,
+          so it auto-disables its effect when allowlist mode is on.
+        </p>
+      </div>
+      <a class="btn btn-ghost" href="#" id="openStats">Open stats</a>
     </header>
 
-    <p class="muted">
-      Whitelist mode blocks Shorts everywhere except channels you add to the whitelist. Per-channel modes override behavior on those pages.
-      Strict redirect is fastest but cannot be per-channel, so it auto-disables its effect when whitelist mode is on.
-    </p>
-
-    <section class="panel" aria-label="Global settings">
-      <div class="row"><label>Enabled</label><input id="enabled" type="checkbox" /></div>
-      <div class="row"><label>Block ads/trackers (basic)</label><input id="adBlockEnabled" type="checkbox" /></div>
-      <div class="row"><label>Whitelist mode</label><input id="whitelistMode" type="checkbox" /></div>
-      <div class="row"><label>Strict redirect (fast)</label><input id="strictRedirect" type="checkbox" /></div>
-      <div class="row"><label>Redirect Shorts → Home</label><input id="redirectShorts" type="checkbox" /></div>
-      <div class="row"><label>Hide Shorts shelves</label><input id="hideShelves" type="checkbox" /></div>
-      <div class="row"><label>Hide Shorts links</label><input id="hideLinks" type="checkbox" /></div>
-      <div class="row"><label>Hide sidebar “Shorts”</label><input id="hideSidebarEntry" type="checkbox" /></div>
-      <div class="row"><label>Hide channel Shorts tab</label><input id="hideChannelShortsTab" type="checkbox" /></div>
-      <div class="note muted" id="status"></div>
-    </section>
-
-    <section class="panel" aria-label="Whitelist">
-      <div class="rowhead">
-        <h2>Whitelist</h2>
-        <button class="btn" id="clearWhitelist" type="button">Clear</button>
+    <section class="status-strip" aria-label="Status">
+      <div class="status-card" id="statusEnabledCard">
+        <div class="status-label">Extension</div>
+        <div class="status-value" id="statusEnabled">—</div>
       </div>
-      <div class="muted small">Channels you approve (e.g., @handle or UC...)</div>
-      <ul id="whitelistList" class="list"></ul>
-    </section>
-
-    <section class="panel" aria-label="Channel overrides">
-      <div class="rowhead">
-        <h2>Per-channel modes</h2>
-        <button class="btn" id="clearOverrides" type="button">Clear</button>
+      <div class="status-card" id="statusAdblockCard">
+        <div class="status-label">Adblock</div>
+        <div class="status-value" id="statusAdblock">—</div>
       </div>
-      <div class="muted small">Modes: both, hide, redirect, off</div>
-      <table class="table">
-        <thead><tr><th>Channel</th><th>Mode</th><th></th></tr></thead>
-        <tbody id="overrideTable"></tbody>
-      </table>
+      <div class="status-card" id="statusCheckedCard">
+        <div class="status-label">Last check</div>
+        <div class="status-value" id="statusChecked">—</div>
+      </div>
     </section>
 
-    <section class="panel" aria-label="Import Export">
-      <h2>Backup</h2>
-      <div class="muted small">Copy/paste your settings JSON for backup/restore.</div>
-      <textarea id="backup" spellcheck="false"></textarea>
+    <div class="layout">
+      <section class="panel panel-sites" aria-label="Short-form sites">
+        <div class="rowhead">
+          <h2>Short-form sites</h2>
+          <div class="muted small">Pick where to block short-form video.</div>
+        </div>
+        <label class="row row-toggle"><span>YouTube Shorts</span><input id="blockYouTubeShorts" type="checkbox" /></label>
+        <label class="row row-toggle"><span>Instagram Reels</span><input id="blockInstagramReels" type="checkbox" /></label>
+        <label class="row row-toggle"><span>Facebook Reels</span><input id="blockFacebookReels" type="checkbox" /></label>
+        <label class="row row-toggle"><span>TikTok</span><input id="blockTikTok" type="checkbox" /></label>
+        <label class="row row-toggle"><span>Snapchat Spotlight</span><input id="blockSnapchatSpotlight" type="checkbox" /></label>
+        <label class="row row-toggle"><span>Pinterest Watch</span><input id="blockPinterestWatch" type="checkbox" /></label>
+      </section>
+
+      <section class="panel panel-settings" aria-label="Global settings">
+        <div class="section-label">Blocking behavior</div>
+        <label class="row row-toggle"><span>Enabled</span><input id="enabled" type="checkbox" /></label>
+        <label class="row row-toggle"><span>Redirect short-form pages → Home</span><input id="redirectShorts" type="checkbox" /></label>
+        <label class="row row-toggle"><span>Strict redirect (YouTube only, fastest)</span><input id="strictRedirect" type="checkbox" /></label>
+        <label class="row row-toggle"><span>Allowlist mode (YouTube only)</span><input id="whitelistMode" type="checkbox" /></label>
+        <p class="helper muted small">Allowlist disables strict redirect so per-channel rules can apply.</p>
+
+        <div class="section-divider" role="presentation"></div>
+        <div class="section-label">UI cleanup</div>
+        <label class="row row-toggle"><span>Hide short-form shelves (YouTube)</span><input id="hideShelves" type="checkbox" /></label>
+        <label class="row row-toggle"><span>Hide short-form links</span><input id="hideLinks" type="checkbox" /></label>
+        <label class="row row-toggle"><span>Hide short-form nav entries</span><input id="hideSidebarEntry" type="checkbox" /></label>
+        <label class="row row-toggle"><span>Hide channel Shorts tab (YouTube)</span><input id="hideChannelShortsTab" type="checkbox" /></label>
+        <p class="helper muted small">These remove shortcuts and shelves without blocking direct links.</p>
+
+        <div class="section-divider" role="presentation"></div>
+        <div class="section-label">Optional extras</div>
+        <label class="row row-toggle"><span>Block ads/trackers (basic)</span><input id="adBlockEnabled" type="checkbox" /></label>
+        <div class="note muted small inline" id="adblockStatus">
+          <span class="status-pill" id="adblockStatusText">Adblock: off</span>
+          <div class="status-actions">
+            <button class="btn btn-ghost" id="adblockGrant" type="button">Grant permission</button>
+            <button class="btn btn-ghost" id="adblockRefresh" type="button">Recheck</button>
+          </div>
+        </div>
+        <p class="helper muted small">
+          Permission is scoped to known ad/tracker domains used by the built-in ruleset. On YouTube, this also hides sponsored cards/slots.
+        </p>
+        <label class="row row-toggle"><span>Adblock insights (optional)</span><input id="adblockInsights" type="checkbox" /></label>
+        <p class="helper muted small">
+          Shows blocked requests per tab/video and top domains. Requires an extra permission for matched rule info (domains only, stored locally for history).
+        </p>
+        <div class="note muted" id="status"></div>
+      </section>
+
+      <section class="panel panel-adblock-history" aria-label="Adblock insights history">
+        <div class="rowhead">
+          <h2>Adblock insights history</h2>
+        </div>
+        <div class="muted small">
+          Stores blocked ad/tracker domains locally when insights are enabled. No URLs are saved, and only blocked requests appear.
+        </div>
+        <div class="rowactions">
+          <button class="btn" id="adblockHistoryRefresh" type="button">Refresh</button>
+          <button class="btn btn-ghost" id="adblockHistoryCopy" type="button">Copy list</button>
+          <button class="btn btn-ghost" id="adblockHistoryClear" type="button">Clear</button>
+        </div>
+        <table class="table">
+          <thead><tr><th>Domain</th><th>Hits</th><th>Last seen</th></tr></thead>
+          <tbody id="adblockHistoryTable"></tbody>
+        </table>
+        <div class="note muted small" id="adblockHistoryNote"></div>
+      </section>
+
+      <section class="panel panel-allowlist" aria-label="Allowlist">
+        <div class="rowhead">
+          <h2>Allowlist</h2>
+          <button class="btn" id="clearWhitelist" type="button">Clear</button>
+        </div>
+        <div class="muted small">Channels you approve (e.g., @handle or UC...)</div>
+        <ul id="whitelistList" class="list"></ul>
+      </section>
+
+      <section class="panel panel-overrides" aria-label="Channel overrides">
+        <div class="rowhead">
+          <h2>Per-channel modes</h2>
+          <button class="btn" id="clearOverrides" type="button">Clear</button>
+        </div>
+        <div class="muted small">Modes: both, hide, redirect, off</div>
+        <table class="table">
+          <thead><tr><th>Channel</th><th>Mode</th><th></th></tr></thead>
+          <tbody id="overrideTable"></tbody>
+        </table>
+      </section>
+
+      <section class="panel panel-backup" aria-label="Import Export">
+        <h2>Backup</h2>
+        <div class="muted small">Copy/paste your settings JSON for backup/restore.</div>
+        <textarea id="backup" spellcheck="false"></textarea>
+        <div class="rowactions">
+          <button class="btn" id="copy" type="button">Copy</button>
+          <button class="btn" id="restore" type="button">Restore</button>
+          <button class="btn btn-ghost" id="resetDefaults" type="button">Reset to defaults</button>
+        </div>
+        <div class="note muted" id="backupStatus"></div>
+      </section>
+
+    <section class="panel panel-safety" aria-label="Safety and Privacy">
+      <h2>Safety &amp; Privacy</h2>
+      <p class="muted small">
+        Settings are stored in <code>chrome.storage.sync</code>. Daily totals and optional per-channel counts are
+        stored in <code>chrome.storage.local</code>. Adblock insights history stores domains only (local, no URLs).
+        No analytics, no remote servers, and no URL history is stored. Temporary in-tab state is kept only in memory.
+      </p>
       <div class="rowactions">
-        <button class="btn" id="copy" type="button">Copy</button>
-        <button class="btn" id="restore" type="button">Restore</button>
+        <button class="btn btn-ghost" id="runSafetyCheck" type="button">Run safety check</button>
       </div>
-      <div class="note muted" id="backupStatus"></div>
+      <pre class="safety-report muted small" id="safetyReport"></pre>
     </section>
+    </div>
   </main>
 
   <script type="module" src="options.js"></script>
 </body>
 </html>
-

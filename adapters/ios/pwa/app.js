@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS } from "../../../core/config.js";
+import { DEFAULT_SETTINGS } from "../../../storage/settings.js";
 import { getLocalState, getSettings, resetTodayLocal, setSetting } from "../storage.js";
 
 function $(id) { return document.getElementById(id); }
@@ -37,4 +37,3 @@ $("resetToday").addEventListener("click", () => {
 });
 
 refresh();
-

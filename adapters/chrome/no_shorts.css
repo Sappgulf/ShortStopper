@@ -16,8 +16,9 @@
   display: none !important;
 }
 
-/* Hide any link pointing to /shorts/ or /feed/shorts */
-:root[data-ns-enabled="true"][data-ns-hide-links="true"] a[href^="/shorts/"],
+/* Hide feed entry links, but allow direct Shorts URLs. */
+:root[data-ns-enabled="true"][data-ns-hide-links="true"] a[href="/shorts"],
+:root[data-ns-enabled="true"][data-ns-hide-links="true"] a[href^="/shorts?"],
 :root[data-ns-enabled="true"][data-ns-hide-links="true"] a[href^="/feed/shorts"] {
   display: none !important;
 }
@@ -36,3 +37,47 @@
   display: none !important;
 }
 
+/* Instagram: hide Reels navigation entry. */
+:root[data-ns-enabled="true"][data-ns-site="instagram"][data-ns-hide-sidebar="true"] nav a[href^="/reels"],
+:root[data-ns-enabled="true"][data-ns-site="instagram"][data-ns-hide-sidebar="true"] nav a[href^="/reel/"],
+:root[data-ns-enabled="true"][data-ns-site="instagram"][data-ns-hide-sidebar="true"] nav a[href*="instagram.com/reels"],
+:root[data-ns-enabled="true"][data-ns-site="instagram"][data-ns-hide-sidebar="true"] nav a[href*="instagram.com/reel/"] {
+  display: none !important;
+}
+
+/* Facebook: hide Reels navigation entry. */
+:root[data-ns-enabled="true"][data-ns-site="facebook"][data-ns-hide-sidebar="true"] div[role="navigation"] a[href*="/reels"],
+:root[data-ns-enabled="true"][data-ns-site="facebook"][data-ns-hide-sidebar="true"] div[role="navigation"] a[href*="/reel/"],
+:root[data-ns-enabled="true"][data-ns-site="facebook"][data-ns-hide-sidebar="true"] div[role="navigation"] a[href*="/watch/reels"] {
+  display: none !important;
+}
+
+/* Snapchat: hide Spotlight navigation entry. */
+:root[data-ns-enabled="true"][data-ns-site="snapchat"][data-ns-hide-sidebar="true"] nav a[href*="/spotlight"],
+:root[data-ns-enabled="true"][data-ns-site="snapchat"][data-ns-hide-sidebar="true"] div[role="navigation"] a[href*="/spotlight"] {
+  display: none !important;
+}
+
+/* Pinterest: hide Watch navigation entry. */
+:root[data-ns-enabled="true"][data-ns-site="pinterest"][data-ns-hide-sidebar="true"] nav a[href^="/watch"],
+:root[data-ns-enabled="true"][data-ns-site="pinterest"][data-ns-hide-sidebar="true"] nav a[href*="pinterest.com/watch"] {
+  display: none !important;
+}
+
+/* YouTube: hide sponsored cards/slots when adblock is enabled. */
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-display-ad-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-promoted-video-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-promoted-sparkles-text-search-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-promoted-sparkles-web-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-search-pyv-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-ad-slot-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-in-feed-ad-layout-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-companion-slot-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-action-companion-ad-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-video-masthead-ad-v3-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-video-masthead-ad-primary-video-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-compact-promoted-video-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-compact-promoted-item-renderer,
+:root[data-ns-adblock="true"][data-ns-site="youtube"] ytd-carousel-ad-renderer {
+  display: none !important;
+}

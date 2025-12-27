@@ -1,5 +1,11 @@
-import { DEFAULT_LOCAL_STATE, DEFAULT_SETTINGS, MAX_DAYS, mergeDefaults } from "../../core/config.js";
-import { bumpBlocked, ensureTodayState, resetToday } from "../../core/stats.js";
+import {
+  DEFAULT_LOCAL_STATE,
+  DEFAULT_SETTINGS,
+  MAX_DAYS,
+  mergeDefaults,
+  sanitizeSettings
+} from "../../storage/settings.js";
+import { bumpBlocked, ensureTodayState, resetToday } from "../../storage/stats.js";
 
 const SETTINGS_KEY = "ns_settings";
 const STATE_KEY = "ns_state";
@@ -18,11 +24,11 @@ function writeJson(key, value) {
 }
 
 export function getSettings() {
-  return mergeDefaults(DEFAULT_SETTINGS, readJson(SETTINGS_KEY));
+  return sanitizeSettings(readJson(SETTINGS_KEY));
 }
 
 export function setSettings(partial) {
-  const next = { ...getSettings(), ...(partial || {}) };
+  const next = sanitizeSettings({ ...getSettings(), ...(partial || {}) });
   writeJson(SETTINGS_KEY, next);
   return next;
 }
@@ -51,4 +57,3 @@ export function resetTodayLocal(date = new Date()) {
   writeJson(STATE_KEY, res.state);
   return res;
 }
-

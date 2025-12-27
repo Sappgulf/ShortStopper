@@ -1,14 +1,9 @@
 (function bootstrap() {
-  try {
-    const p = location.pathname || "";
-    if (p.startsWith("/shorts") || p.startsWith("/feed/shorts")) {
-      document.documentElement.setAttribute("data-ns-preblock", "true");
-      document.documentElement.style.setProperty("visibility", "hidden", "important");
-    }
-  } catch {}
-
   import(chrome.runtime.getURL("adapters/chrome/content_module.js"))
     .then((m) => m.start())
-    .catch(() => {});
+    .catch((err) => {
+      try {
+        console.warn("ShortStopper failed to load content module.", err);
+      } catch {}
+    });
 })();
-

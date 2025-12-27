@@ -1,30 +1,81 @@
 {
   "manifest_version": 3,
-  "name": "No Shorts Companion",
+  "name": "ShortStopper",
   "version": "1.2.0",
-  "description": "Hide/redirect Shorts with per-channel modes, whitelist mode, and local stats.",
+  "description": "Block short-form video (Shorts/Reels/TikTok) with per-channel modes, whitelist mode, and local stats.",
   "action": {
-    "default_title": "No Shorts",
+    "default_title": "ShortStopper",
     "default_popup": "adapters/chrome/popup/popup.html"
   },
   "options_page": "adapters/chrome/options/options.html",
   "permissions": [
     "storage",
     "tabs",
-    "declarativeNetRequest",
-    "permissions"
+    "declarativeNetRequest"
+  ],
+  "optional_permissions": [
+    "declarativeNetRequestFeedback"
   ],
   "optional_host_permissions": [
-    "<all_urls>"
+    "*://*.doubleclick.net/*",
+    "*://*.googlesyndication.com/*",
+    "*://*.googleadservices.com/*",
+    "*://adservice.google.com/*",
+    "*://*.googletagmanager.com/*",
+    "*://*.googletagservices.com/*",
+    "*://*.google-analytics.com/*",
+    "*://analytics.google.com/*",
+    "*://*.analytics.google.com/*",
+    "*://*.adsrvr.org/*",
+    "*://*.adnxs.com/*",
+    "*://*.rubiconproject.com/*",
+    "*://*.openx.net/*",
+    "*://*.criteo.com/*",
+    "*://*.criteo.net/*",
+    "*://*.taboola.com/*",
+    "*://*.outbrain.com/*",
+    "*://*.scorecardresearch.com/*",
+    "*://*.quantserve.com/*",
+    "*://*.hotjar.com/*",
+    "*://*.fullstory.com/*",
+    "*://*.sentry.io/*",
+    "*://*.newrelic.com/*",
+    "*://facebook.com/tr/*",
+    "*://*.facebook.com/tr/*",
+    "*://connect.facebook.net/*",
+    "*://bat.bing.com/*",
+    "*://*.bat.bing.com/*",
+    "*://*.segment.com/*",
+    "*://*.segment.io/*",
+    "*://*.mixpanel.com/*",
+    "*://*.optimizely.com/*"
   ],
   "host_permissions": [
-    "*://www.youtube.com/*",
-    "*://m.youtube.com/*",
-    "*://youtube.com/*"
+    "https://www.youtube.com/*",
+    "https://m.youtube.com/*",
+    "https://youtube.com/*",
+    "https://www.instagram.com/*",
+    "https://m.instagram.com/*",
+    "https://instagram.com/*",
+    "https://www.facebook.com/*",
+    "https://m.facebook.com/*",
+    "https://facebook.com/*",
+    "https://www.tiktok.com/*",
+    "https://m.tiktok.com/*",
+    "https://tiktok.com/*",
+    "https://www.snapchat.com/*",
+    "https://m.snapchat.com/*",
+    "https://snapchat.com/*",
+    "https://www.pinterest.com/*",
+    "https://m.pinterest.com/*",
+    "https://pinterest.com/*"
   ],
   "background": {
     "service_worker": "adapters/chrome/service_worker.js",
     "type": "module"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; base-uri 'self';"
   },
   "declarative_net_request": {
     "rule_resources": [
@@ -40,12 +91,61 @@
       }
     ]
   },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "adapters/chrome/content_module.js",
+        "adapters/chrome/storage.js",
+        "policy/*.js",
+        "runtime/*.js",
+        "storage/*.js",
+        "platform/*.js",
+        "ui/page_visibility.js",
+        "ui/root_flags.js"
+      ],
+      "matches": [
+        "https://www.youtube.com/*",
+        "https://m.youtube.com/*",
+        "https://youtube.com/*",
+        "https://www.instagram.com/*",
+        "https://m.instagram.com/*",
+        "https://instagram.com/*",
+        "https://www.facebook.com/*",
+        "https://m.facebook.com/*",
+        "https://facebook.com/*",
+        "https://www.tiktok.com/*",
+        "https://m.tiktok.com/*",
+        "https://tiktok.com/*",
+        "https://www.snapchat.com/*",
+        "https://m.snapchat.com/*",
+        "https://snapchat.com/*",
+        "https://www.pinterest.com/*",
+        "https://m.pinterest.com/*",
+        "https://pinterest.com/*"
+      ]
+    }
+  ],
   "content_scripts": [
     {
       "matches": [
-        "*://www.youtube.com/*",
-        "*://m.youtube.com/*",
-        "*://youtube.com/*"
+        "https://www.youtube.com/*",
+        "https://m.youtube.com/*",
+        "https://youtube.com/*",
+        "https://www.instagram.com/*",
+        "https://m.instagram.com/*",
+        "https://instagram.com/*",
+        "https://www.facebook.com/*",
+        "https://m.facebook.com/*",
+        "https://facebook.com/*",
+        "https://www.tiktok.com/*",
+        "https://m.tiktok.com/*",
+        "https://tiktok.com/*",
+        "https://www.snapchat.com/*",
+        "https://m.snapchat.com/*",
+        "https://snapchat.com/*",
+        "https://www.pinterest.com/*",
+        "https://m.pinterest.com/*",
+        "https://pinterest.com/*"
       ],
       "run_at": "document_start",
       "css": [

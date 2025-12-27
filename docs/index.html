@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ShortStopper</title>
-  <meta name="description" content="Block YouTube Shorts (hide + redirect-to-Home), with per-channel controls and local stats." />
+  <meta name="description" content="Block short-form video (YouTube Shorts, Instagram/Facebook Reels, TikTok, Snapchat Spotlight, Pinterest Watch) with per-channel controls and local stats." />
   <link rel="icon" href="../assets/icon48.png" />
   <link rel="stylesheet" href="./site.css" />
 </head>
@@ -15,7 +15,7 @@
         <img class="logo" src="../assets/icon128.png" alt="" />
         <div>
           <h1>ShortStopper</h1>
-          <div class="muted">Block YouTube Shorts. Fast. Local. No accounts.</div>
+          <div class="muted">Block short-form video. Fast. Local. No accounts.</div>
         </div>
       </div>
       <div class="actions">
@@ -42,9 +42,9 @@
       <div class="card">
         <h2>What it does</h2>
         <ul class="list">
-          <li>Blocks <code>/shorts/*</code> and <code>/feed/shorts</code> (redirects to Home).</li>
-          <li>Hides Shorts shelves, links, sidebar entries, and channel Shorts tabs.</li>
-          <li>Whitelist mode + per-channel overrides.</li>
+          <li>Blocks Shorts/Reels pages (redirects to Home).</li>
+          <li>Supports YouTube Shorts, Instagram Reels, Facebook Reels, TikTok, Snapchat Spotlight, and Pinterest Watch.</li>
+          <li>Allowlist mode + per-channel overrides (YouTube only).</li>
           <li>Local stats (no accounts, no servers).</li>
         </ul>
       </div>
@@ -52,7 +52,8 @@
       <div class="card">
         <h2>Optional: basic ad/tracker blocking</h2>
         <div class="muted">
-          If you enable <strong>Block ads/trackers (basic)</strong>, Chrome will prompt for the <code>&lt;all_urls&gt;</code> permission.
+          If you enable <strong>Block ads/trackers (basic)</strong>, Chrome will prompt for permission to the listed ad/tracker domains.
+          Adblock insights (optional) requests an additional permission to show blocked request counts and top domains (domains saved locally, no URLs).
           If you deny it, the blocker stays off.
         </div>
       </div>
@@ -74,4 +75,3 @@
   </main>
 </body>
 </html>
-

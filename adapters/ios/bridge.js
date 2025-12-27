@@ -1,6 +1,6 @@
-import { channelKeyFromDom, channelKeyFromUrl, shouldAttemptDomChannelKey } from "../../core/channel.js";
-import { resolveEffectiveSettings } from "../../core/policy.js";
-import { parseShortsPath } from "../../core/shorts.js";
+import { channelKeyFromDom, channelKeyFromUrl, shouldAttemptDomChannelKey } from "../../runtime/channel.js";
+import { isSiteEnabled, resolveEffectiveSettings } from "../../policy/settings_policy.js";
+import { parseShortsPath } from "../../policy/shorts.js";
 import { bumpBlockedLocal, getSettings } from "./storage.js";
 
 function getCurrentChannelKey() {
@@ -46,7 +46,14 @@ function showNote(text) {
     el.id = "ns-ios-note";
     document.documentElement.appendChild(el);
   }
-  el.innerHTML = `<span>${text}</span><a href="/">Go Home</a>`;
+  el.textContent = "";
+  const span = document.createElement("span");
+  span.textContent = text;
+  const link = document.createElement("a");
+  link.href = "/";
+  link.textContent = "Go Home";
+  el.appendChild(span);
+  el.appendChild(link);
 }
 
 function applyHideCssFlags(effective) {
@@ -96,7 +103,8 @@ function shouldBlockShortsRoute(effective) {
 async function applyAll() {
   const settings = getSettings();
   const channelKey = getCurrentChannelKey();
-  const effective = resolveEffectiveSettings(settings, channelKey);
+  const siteEnabled = isSiteEnabled(settings, "youtube");
+  const effective = resolveEffectiveSettings({ ...settings, enabled: settings.enabled && siteEnabled }, channelKey);
 
   applyHideCssFlags(effective);
 
@@ -133,4 +141,3 @@ export function startBridge() {
 if (typeof window !== "undefined" && typeof document !== "undefined") {
   startBridge();
 }
-

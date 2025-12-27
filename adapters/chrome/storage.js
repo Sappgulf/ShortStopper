@@ -1,27 +1,34 @@
-import { DEFAULT_LOCAL_STATE, DEFAULT_SETTINGS, MAX_DAYS, mergeDefaults } from "../../core/config.js";
-import { bumpBlocked, ensureTodayState, resetToday } from "../../core/stats.js";
+import { getLocal, getSync, setLocal, setSync } from "../../platform/chrome.js";
+import {
+  DEFAULT_LOCAL_STATE,
+  DEFAULT_SETTINGS,
+  MAX_DAYS,
+  mergeDefaults,
+  sanitizeSettings
+} from "../../storage/settings.js";
+import { bumpBlocked, ensureTodayState, resetToday } from "../../storage/stats.js";
 
 export async function getSettings() {
-  const s = await chrome.storage.sync.get(DEFAULT_SETTINGS);
-  return mergeDefaults(DEFAULT_SETTINGS, s);
+  const s = await getSync(DEFAULT_SETTINGS);
+  return sanitizeSettings(s);
 }
 
 export async function ensureSettingsDefaults() {
-  const current = await chrome.storage.sync.get(null);
+  const current = await getSync(null);
   const patch = {};
   for (const [k, v] of Object.entries(DEFAULT_SETTINGS)) {
     if (!(k in (current || {}))) patch[k] = v;
   }
-  if (Object.keys(patch).length) await chrome.storage.sync.set(patch);
+  if (Object.keys(patch).length) await setSync(patch);
 }
 
 export async function getLocalState() {
-  const s = await chrome.storage.local.get(DEFAULT_LOCAL_STATE);
+  const s = await getLocal(DEFAULT_LOCAL_STATE);
   return mergeDefaults(DEFAULT_LOCAL_STATE, s);
 }
 
 export async function setLocalState(nextState) {
-  await chrome.storage.local.set({
+  await setLocal({
     blockedDate: nextState.blockedDate,
     blockedTotal: nextState.blockedTotal,
     stats: nextState.stats
@@ -48,4 +55,3 @@ export async function resetTodayLocal(date = new Date()) {
   await setLocalState(res.state);
   return res;
 }
-

@@ -1,3 +1,5 @@
+import { sendRuntimeMessage } from "../../../platform/chrome.js";
+
 function todayKey() {
   const d = new Date();
   const yyyy = d.getFullYear();
@@ -36,26 +38,52 @@ function renderChart(svg, values) {
   const n = values.length;
 
   const bw = (w - pad * 2) / n;
+  const svgNS = "http://www.w3.org/2000/svg";
 
-  const bars = values.map((v, i) => {
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+  const g = document.createElementNS(svgNS, "g");
+  g.setAttribute("fill", "currentColor");
+  g.setAttribute("opacity", "0.9");
+
+  values.forEach((v, i) => {
     const x = pad + i * bw;
     const bh = Math.round(((h - pad * 2) * v) / max);
     const y = h - pad - bh;
-    return `<rect x="${x + 2}" y="${y}" width="${Math.max(2, bw - 4)}" height="${bh}" rx="3" />`;
-  }).join("");
+    const rect = document.createElementNS(svgNS, "rect");
+    rect.setAttribute("x", String(x + 2));
+    rect.setAttribute("y", String(y));
+    rect.setAttribute("width", String(Math.max(2, bw - 4)));
+    rect.setAttribute("height", String(bh));
+    rect.setAttribute("rx", "3");
+    g.appendChild(rect);
+  });
 
-  const axis = `<line x1="${pad}" y1="${h - pad}" x2="${w - pad}" y2="${h - pad}" stroke="currentColor" opacity="0.25"/>`;
+  const axis = document.createElementNS(svgNS, "line");
+  axis.setAttribute("x1", String(pad));
+  axis.setAttribute("y1", String(h - pad));
+  axis.setAttribute("x2", String(w - pad));
+  axis.setAttribute("y2", String(h - pad));
+  axis.setAttribute("stroke", "currentColor");
+  axis.setAttribute("opacity", "0.25");
 
-  svg.innerHTML = `
-    <g fill="currentColor" opacity="0.9">${bars}</g>
-    ${axis}
-  `;
+  svg.appendChild(g);
+  svg.appendChild(axis);
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c])
-  );
+const SOURCE_LABELS = {
+  "site:youtube": "YouTube Shorts",
+  "site:instagram": "Instagram Reels",
+  "site:facebook": "Facebook Reels",
+  "site:tiktok": "TikTok",
+  "site:snapchat": "Snapchat Spotlight",
+  "site:pinterest": "Pinterest Watch"
+};
+
+function formatSourceKey(key) {
+  if (SOURCE_LABELS[key]) return SOURCE_LABELS[key];
+  if (key.startsWith("site:")) return key.slice("site:".length);
+  return key;
 }
 
 function renderTopChannels(tbody, channelTotals) {
@@ -63,18 +91,37 @@ function renderTopChannels(tbody, channelTotals) {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 12);
 
-  tbody.innerHTML = rows.length
-    ? rows.map(([k, v]) => `<tr><td>${escapeHtml(k)}</td><td class="num">${v}</td></tr>`).join("")
-    : `<tr><td class="muted" colspan="2">No channel data yet.</td></tr>`;
+  tbody.textContent = "";
+  if (!rows.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.className = "muted";
+    td.colSpan = 2;
+    td.textContent = "No source data yet.";
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    return;
+  }
+
+  rows.forEach(([k, v]) => {
+    const tr = document.createElement("tr");
+    const tdName = document.createElement("td");
+    tdName.textContent = formatSourceKey(k);
+    const tdValue = document.createElement("td");
+    tdValue.className = "num";
+    tdValue.textContent = String(v);
+    tr.append(tdName, tdValue);
+    tbody.appendChild(tr);
+  });
 }
 
 async function loadStats() {
-  const res = await chrome.runtime.sendMessage({ type: "ns.getStats" });
+  const res = await sendRuntimeMessage({ type: "ns.getStats" });
   return res?.stats || { days: {} };
 }
 
 async function loadTotals() {
-  const res = await chrome.runtime.sendMessage({ type: "ns.getTotals" });
+  const res = await sendRuntimeMessage({ type: "ns.getTotals" });
   return { blockedTotal: res?.blockedTotal ?? 0, blockedDate: res?.blockedDate ?? todayKey() };
 }
 
@@ -115,4 +162,3 @@ document.getElementById("days").addEventListener("change", (e) => {
 });
 
 refresh(14);
-

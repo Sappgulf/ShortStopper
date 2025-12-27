@@ -11,8 +11,8 @@ rm -f "$OUT_ZIP"
 cd "$ROOT"
 
 zip -r "$OUT_ZIP" \
-  adapters core assets rules content_scripts ui \
-  manifest.json service_worker.js README.md PRIVACY.md \
+  adapters core policy runtime storage platform assets rules content_scripts ui \
+  manifest.json service_worker.js README.md PRIVACY.md SECURITY.md \
   -x \
   "_metadata/*" \
   "adapters/ios/*" \
@@ -22,4 +22,3 @@ zip -r "$OUT_ZIP" \
   "scripts/*"
 
 echo "Created: $OUT_ZIP"
-
