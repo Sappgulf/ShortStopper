@@ -7,8 +7,8 @@
   --card: #fffaf2;
   --card-2: #f7efe3;
   --border: #e6d9c9;
-  --accent: #0f8a72;
-  --accent-2: #f6a643;
+  --accent: #f06a2d;
+  --accent-2: #d4472a;
   --shadow: 0 14px 30px rgba(32, 26, 18, 0.12);
   --radius: 18px;
   font: 14px/1.55 "Avenir Next", "Avenir", "Segoe UI Variable Display", "Trebuchet MS", "Helvetica Neue", sans-serif;
@@ -23,8 +23,8 @@
     --card: #151b21;
     --card-2: #1b242c;
     --border: #2a333c;
-    --accent: #2fd5b8;
-    --accent-2: #f0b15c;
+    --accent: #f06a2d;
+    --accent-2: #d4472a;
     --shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
   }
 }
@@ -325,6 +325,13 @@ input[type="checkbox"]:focus-visible{
   background: transparent;
   box-shadow: none;
 }
+.btn:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible{
+  outline: 2px solid color-mix(in oklab, var(--accent) 70%, transparent);
+  outline-offset: 2px;
+}
 
 .list{
   margin: 10px 0 0;
@@ -360,6 +367,9 @@ th{
   font-size: 11px;
 }
 td:last-child{ width: 1%; white-space: nowrap; }
+tbody tr:hover{
+  background: color-mix(in oklab, var(--card) 85%, var(--bg));
+}
 select{
   padding: .45rem .6rem;
   border-radius: 12px;

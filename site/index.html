@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ShortStopper blocks Shorts and Reels without breaking normal browsing." />
+  <title>ShortStopper - Block Shorts and Reels</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="assets/icon48.png" sizes="48x48" />
+  <link rel="icon" href="assets/icon128.png" sizes="128x128" />
+  <link rel="apple-touch-icon" href="assets/icon128.png" />
+</head>
+<body>
+  <header class="nav">
+    <div class="brand">
+      <img src="assets/logo.png" alt="ShortStopper logo" class="brand-logo" />
+      <div>
+        <div class="brand-eyebrow">ShortStopper</div>
+        <div class="brand-title">Block short-form feeds</div>
+      </div>
+    </div>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#features">Why it works</a>
+      <a href="#install">Install</a>
+      <a href="#security">Security</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn primary" href="#install">Get ShortStopper</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <div class="eyebrow">Chrome MV3 extension</div>
+        <h1>ShortStopper</h1>
+        <p class="subtitle">Block Shorts and Reels without breaking normal browsing.</p>
+        <div class="cta-row">
+          <a class="btn primary" data-link="webstore" data-label="Install from Chrome Web Store" data-disabled-label="Web Store coming soon" href="#">Install from Chrome Web Store</a>
+          <a class="btn" data-link="zip" data-label="Download ZIP (Load Unpacked)" data-disabled-label="ZIP download coming soon" href="#">Download ZIP (Load Unpacked)</a>
+        </div>
+        <div class="cta-row secondary">
+          <a class="link" data-link="source" data-label="View source" data-disabled-label="Source link coming soon" href="#">View source</a>
+          <span class="note">Web Store installs are recommended. ZIP is for Developer Mode.</span>
+        </div>
+        <div class="trust-row">
+          <span class="pill">SPA-safe routing</span>
+          <span class="pill">Overlay-first blocking</span>
+          <span class="pill">Local-only data</span>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <h2>What it blocks</h2>
+        <ul class="checklist">
+          <li>Shorts and Reels feeds</li>
+          <li>Short-form shelves and nav entries</li>
+          <li>Sponsored cards when adblock is enabled</li>
+        </ul>
+        <div class="panel-note">Watch pages, search results, and profiles stay accessible.</div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="section-head">
+        <h2>Why it works</h2>
+        <p>Simple, predictable behavior: block the feed, keep the rest of the site usable.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <h3>Smart route policy</h3>
+          <p>Centralized classification avoids overblocking and respects normal watch, results, and profile routes.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Overlay-first blocking</h3>
+          <p>Overlay-first blocking prevents redirect loops and keeps SPA state stable.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Allow once + allowlist</h3>
+          <p>Temporarily allow Shorts or whitelist channels without disabling the extension.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Security-first architecture</h3>
+          <p>MV3, strict CSP, message validation, and local-only storage by default.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="install">
+      <div class="section-head">
+        <h2>Install in minutes</h2>
+        <p>Use the Web Store for the smoothest install. Developer Mode is available for ZIP builds.</p>
+      </div>
+      <div class="install-grid">
+        <div class="install-card">
+          <h3>Chrome Web Store</h3>
+          <ol>
+            <li>Open the Web Store listing.</li>
+            <li>Click <strong>Add to Chrome</strong>.</li>
+            <li>Confirm permissions.</li>
+          </ol>
+          <a class="btn primary" data-link="webstore" data-label="Install from Chrome Web Store" data-disabled-label="Web Store coming soon" href="#">Install from Chrome Web Store</a>
+        </div>
+        <div class="install-card">
+          <h3>Load Unpacked (ZIP)</h3>
+          <ol>
+            <li>Download the ZIP and unzip it.</li>
+            <li>Open <code>chrome://extensions</code>.</li>
+            <li>Enable Developer Mode.</li>
+            <li>Select <strong>Load unpacked</strong>.</li>
+          </ol>
+          <div class="button-row">
+            <a class="btn" data-link="zip" data-label="Download ZIP" data-disabled-label="ZIP download coming soon" href="#">Download ZIP</a>
+            <button class="btn ghost" type="button" data-copy="chrome://extensions" data-copy-label="Copy chrome://extensions">Copy extensions URL</button>
+          </div>
+          <div class="button-row">
+            <button class="btn ghost" type="button" data-copy="1) Open chrome://extensions\n2) Enable Developer Mode\n3) Click Load unpacked\n4) Select the ShortStopper folder" data-copy-label="Copy checklist">Copy checklist</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="security">
+      <div class="section-head">
+        <h2>Security and privacy</h2>
+        <p>ShortStopper uses least-privilege permissions and keeps data local.</p>
+      </div>
+      <div class="security-grid">
+        <div class="security-card">
+          <h3>Least privilege permissions</h3>
+          <p>Hosts are scoped to supported sites. Optional adblock permissions are domain-limited.</p>
+        </div>
+        <div class="security-card">
+          <h3>No remote code</h3>
+          <p>Everything ships with the extension. No external scripts or CDNs.</p>
+        </div>
+        <div class="security-card">
+          <h3>No analytics by default</h3>
+          <p>ShortStopper does not track or collect browsing data.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-head">
+        <h2>FAQ</h2>
+        <p>Quick answers to common questions.</p>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h3>Why is the Web Store recommended?</h3>
+          <p>It provides automatic updates, verified distribution, and a smoother install experience.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What is blocked vs allowed?</h3>
+          <p>Short-form feeds like Shorts and Reels are blocked. Search results, watch pages, channels, and profiles are allowed.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Does ShortStopper collect data?</h3>
+          <p>No. Settings and stats live locally. Optional insights store domain-only counts locally.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-left">
+      <div class="brand">
+        <img src="assets/logo.png" alt="ShortStopper" class="footer-logo" />
+        <span>ShortStopper</span>
+      </div>
+      <div class="muted small">Version <span id="versionValue">-</span> | Last updated <span id="updatedValue">-</span></div>
+    </div>
+    <div class="footer-right">
+      <div class="muted small">Copyright <span id="yearValue">2025</span> ShortStopper</div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

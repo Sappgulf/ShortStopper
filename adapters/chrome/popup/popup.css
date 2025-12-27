@@ -5,7 +5,8 @@
   --muted: color-mix(in oklab, var(--fg) 60%, var(--bg));
   --card: color-mix(in oklab, var(--bg) 92%, var(--fg));
   --border: color-mix(in oklab, var(--fg) 18%, var(--bg));
-  --accent: oklch(70% 0.16 250);
+  --accent: #f06a2d;
+  --accent-2: #d4472a;
   font: 13px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial;
 }
 
