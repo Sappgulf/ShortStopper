@@ -306,10 +306,22 @@ async function applyRulesets(settings) {
     canBlockAdHosts = await permissionsContains(ADBLOCK_HOSTS);
   } catch {}
 
-  if (shouldEnableAdBlockRuleset(settings) && canBlockAdHosts) enableRulesetIds.push("basic_block");
-  else disableRulesetIds.push("basic_block");
+  const shouldEnableAdblock = shouldEnableAdBlockRuleset(settings) && canBlockAdHosts;
+  
+  if (shouldEnableAdblock) {
+    enableRulesetIds.push("basic_block");
+    enableRulesetIds.push("cosmetic_block");
+  } else {
+    disableRulesetIds.push("basic_block");
+    disableRulesetIds.push("cosmetic_block");
+  }
 
-  await updateRulesets(enableRulesetIds, disableRulesetIds);
+  try {
+    await updateRulesets(enableRulesetIds, disableRulesetIds);
+  } catch (err) {
+    // Log error but don't throw - ruleset update failures shouldn't break the extension
+    console.error("Failed to update rulesets:", err);
+  }
 }
 
 chrome.declarativeNetRequest?.onRuleMatchedDebug?.addListener?.((info) => {

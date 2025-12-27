@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ShortStopper",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Block short-form video (Shorts/Reels/TikTok) with per-channel modes, whitelist mode, and local stats.",
   "action": {
     "default_title": "ShortStopper",
@@ -107,7 +107,24 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "adapters/chrome/content_module.js"
+        "adapters/chrome/content_module.js",
+        "adapters/chrome/storage.js",
+        "storage/settings.js",
+        "storage/stats.js",
+        "runtime/channel.js",
+        "runtime/navigation.js",
+        "runtime/route_cache.js",
+        "runtime/session_state.js",
+        "runtime/debug.js",
+        "policy/decision.js",
+        "policy/route_policy.js",
+        "policy/shortform.js",
+        "policy/shorts.js",
+        "policy/settings_policy.js",
+        "ui/page_visibility.js",
+        "ui/root_flags.js",
+        "platform/chrome.js",
+        "platform/messages.js"
       ],
       "matches": [
         "https://www.youtube.com/*",
