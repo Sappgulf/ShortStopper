@@ -39,15 +39,12 @@ export function shouldBlockRoute(effective, policy, siteId, currentUrl) {
   if (!effective.redirectShorts) return { block: false, reason: "redirect_off" };
   if (policy.action !== "block") return { block: false, reason: "allowed" };
 
-  let canBlockByMode = !!effective.__redirectEnabled;
-  if (siteId === "youtube" && effective.strictRedirect && !effective.whitelistMode) {
-    canBlockByMode = true;
-  }
-  if (!canBlockByMode) return { block: false, reason: "mode_off" };
+  // Block if redirect mode is enabled (either via channel mode or global setting)
+  if (!effective.__redirectEnabled) return { block: false, reason: "mode_off" };
 
   // Determine redirect URL
   let redirectUrl = null;
-  
+
   // If we have a convertUrl (e.g., Shorts -> Watch), use that
   if (policy.convertUrl) {
     try {
@@ -57,8 +54,8 @@ export function shouldBlockRoute(effective, policy, siteId, currentUrl) {
     }
   }
 
-  return { 
-    block: true, 
+  return {
+    block: true,
     reason: policy.reason || "blocked",
     redirectUrl
   };

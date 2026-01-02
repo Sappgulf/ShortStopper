@@ -1,9 +1,40 @@
 /* ============================================================================
    ShortStopper CSS - Cosmetic Filtering
    ============================================================================
-   The content script toggles root flags; CSS only acts when flags are set.
-   This approach is performant and doesn't require JavaScript for hiding.
+   This CSS is ALWAYS injected on matched sites. It hides shorts content
+   immediately without waiting for JavaScript to set data attributes.
    ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   ALWAYS HIDE: YouTube Shorts - These rules apply unconditionally
+   ---------------------------------------------------------------------------- */
+
+/* YouTube Shorts shelf on homepage */
+ytd-reel-shelf-renderer,
+ytd-rich-shelf-renderer[is-shorts],
+ytd-rich-section-renderer:has(ytd-reel-shelf-renderer),
+ytd-rich-section-renderer:has([is-shorts]) {
+  display: none !important;
+}
+
+/* Shorts items in search/feeds */
+ytd-reel-item-renderer,
+ytd-video-renderer[is-shorts],
+ytd-grid-video-renderer[is-shorts],
+ytd-rich-item-renderer[is-shorts],
+ytd-rich-item-renderer[is-shorts-grid] {
+  display: none !important;
+}
+
+/* Shorts nav links */
+a[href="/shorts"],
+a[href^="/shorts?"],
+a[href^="/feed/shorts"],
+a[title="Shorts"],
+ytd-guide-entry-renderer:has(a[href*="/shorts"]),
+ytd-mini-guide-entry-renderer:has(a[href*="/shorts"]) {
+  display: none !important;
+}
 
 /* ----------------------------------------------------------------------------
    Pre-block: Hide page while deciding whether to redirect
@@ -11,6 +42,7 @@
 :root[data-ns-preblock="true"] {
   background: Canvas !important;
 }
+
 :root[data-ns-preblock="true"] body {
   display: none !important;
 }
@@ -202,13 +234,4 @@
 :root[data-ns-adblock="true"] [class*="interstitial"],
 :root[data-ns-adblock="true"] [id*="interstitial"] {
   display: none !important;
-}
-
-/* Cookie consent overlays (optional - reduces annoyance) */
-:root[data-ns-adblock="true"] [class*="cookie-consent"],
-:root[data-ns-adblock="true"] [class*="cookie-banner"],
-:root[data-ns-adblock="true"] [id*="cookie-consent"],
-:root[data-ns-adblock="true"] [id*="cookieBanner"] {
-  /* Note: Not hiding by default as these may be legally required */
-  /* Uncomment to hide: display: none !important; */
 }

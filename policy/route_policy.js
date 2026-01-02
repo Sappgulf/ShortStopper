@@ -46,18 +46,18 @@ function classifyYouTube(pathname) {
     return { action: "block", reason: "shorts_feed", isFeed: true };
   }
 
-  // Individual Short - can convert to watch URL
+  // Individual Short - redirect to watch page if video ID present
   if (parts[0] === "shorts") {
     const videoId = extractShortsVideoId(pathname);
     if (videoId) {
       return {
         action: "block",
-        reason: "shorts_video",
+        reason: "shorts",
         isFeed: false,
         convertUrl: `/watch?v=${videoId}`
       };
     }
-    return { action: "block", reason: "shorts_surface", isFeed: true };
+    return { action: "block", reason: "shorts", isFeed: true };
   }
 
   // Channel Shorts tab

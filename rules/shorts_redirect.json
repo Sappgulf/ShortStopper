@@ -5,12 +5,14 @@
     "action": {
       "type": "redirect",
       "redirect": {
-        "regexSubstitution": "https://\\1/watch?v=\\2"
+        "url": "https://www.youtube.com/"
       }
     },
     "condition": {
-      "regexFilter": "^https://((?:www\\.|m\\.)?youtube\\.com)/shorts/([a-zA-Z0-9_-]{11})(?:[?#].*)?$",
-      "resourceTypes": ["main_frame"]
+      "urlFilter": "*://www.youtube.com/shorts/*",
+      "resourceTypes": [
+        "main_frame"
+      ]
     }
   },
   {
@@ -19,12 +21,14 @@
     "action": {
       "type": "redirect",
       "redirect": {
-        "regexSubstitution": "https://\\1/"
+        "url": "https://m.youtube.com/"
       }
     },
     "condition": {
-      "regexFilter": "^https://((?:www\\.|m\\.)?youtube\\.com)/shorts(?:/[^a-zA-Z0-9_-].*|/)?(?:[?#].*)?$",
-      "resourceTypes": ["main_frame"]
+      "urlFilter": "*://m.youtube.com/shorts/*",
+      "resourceTypes": [
+        "main_frame"
+      ]
     }
   },
   {
@@ -33,12 +37,238 @@
     "action": {
       "type": "redirect",
       "redirect": {
-        "regexSubstitution": "https://\\1/"
+        "url": "https://www.youtube.com/"
       }
     },
     "condition": {
-      "regexFilter": "^https://((?:www\\.|m\\.)?youtube\\.com)/feed/shorts(?:/[^?#]*)?(?:[?#].*)?$",
-      "resourceTypes": ["main_frame"]
+      "urlFilter": "*://www.youtube.com/feed/shorts*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 4,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://m.youtube.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://m.youtube.com/feed/shorts*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 10,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.instagram.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://www.instagram.com/reel/*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 11,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.instagram.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://www.instagram.com/reels*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 12,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://m.instagram.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://m.instagram.com/reel/*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 13,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://m.instagram.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://m.instagram.com/reels*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 20,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.tiktok.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://www.tiktok.com/foryou*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 21,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.tiktok.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://www.tiktok.com/@*/video/*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 22,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://m.tiktok.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://m.tiktok.com/foryou*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 30,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.facebook.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://www.facebook.com/reel/*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 31,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.facebook.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://www.facebook.com/reels*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 32,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://m.facebook.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://m.facebook.com/reel/*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 33,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://m.facebook.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://m.facebook.com/reels*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 40,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.snapchat.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://www.snapchat.com/spotlight*",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 41,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.pinterest.com/"
+      }
+    },
+    "condition": {
+      "urlFilter": "*://www.pinterest.com/watch*",
+      "resourceTypes": [
+        "main_frame"
+      ]
     }
   }
 ]

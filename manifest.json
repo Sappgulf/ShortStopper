@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ShortStopper",
-  "version": "1.4.0",
+  "version": "1.4.3",
   "description": "Block short-form video (Shorts/Reels/TikTok) with per-channel modes, whitelist mode, and local stats.",
   "action": {
     "default_title": "ShortStopper",
@@ -94,12 +94,12 @@
       },
       {
         "id": "basic_block",
-        "enabled": false,
+        "enabled": true,
         "path": "rules/basic_block.json"
       },
       {
         "id": "cosmetic_block",
-        "enabled": false,
+        "enabled": true,
         "path": "rules/cosmetic_block.json"
       }
     ]

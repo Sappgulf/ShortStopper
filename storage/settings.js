@@ -51,7 +51,7 @@ export const DEFAULT_SETTINGS = {
   channelWhitelist: [],
   channelOverrides: {},
 
-  adBlockEnabled: false,
+  adBlockEnabled: true,
   adblockInsights: false
 };
 

@@ -46,7 +46,10 @@ const SITE_LINK_SELECTORS = {
   ],
   snapchat: ['a[href^="/spotlight"]', 'a[href*="snapchat.com/spotlight"]'],
   pinterest: ['a[href^="/watch"]', 'a[href*="pinterest.com/watch"]'],
-  tiktok: [] // TikTok links are handled differently
+  tiktok: [
+    'a[href*="/video/"]',
+    'a[href*="tiktok.com/@"]' // Catches user profiles too, but policy check will sort it out
+  ]
 };
 
 const SITE_CARD_SELECTORS = {
@@ -425,7 +428,7 @@ function setObserverActive(active) {
   }
 
   if (linkObserver) return;
-  
+
   linkObserver = new MutationObserver((mutations) => {
     for (const m of mutations) {
       for (const node of m.addedNodes) {
@@ -438,7 +441,7 @@ function setObserverActive(active) {
       scheduleMutationFlush();
     }
   });
-  
+
   // Observe body instead of documentElement for better performance
   const target = document.body || document.documentElement;
   linkObserver.observe(target, { childList: true, subtree: true });
@@ -471,7 +474,7 @@ function showBlockedOverlay(siteId) {
 async function applyAll() {
   const token = ++navToken;
   const siteId = getSiteId();
-  
+
   if (!siteId) {
     effective = null;
     setObserverActive(false);
@@ -517,7 +520,7 @@ async function applyAll() {
   }
 
   const decision = shouldBlockRoute(effective, policy, siteId, location.href);
-  
+
   if (decision.block) {
     // Determine redirect target
     let redirectUrl = decision.redirectUrl;
@@ -584,22 +587,22 @@ function scheduleDelayedLabelRename() {
 function attemptLabelRename() {
   if (labelRenameAttempts >= MAX_LABEL_RENAME_ATTEMPTS) return;
   if (!effective?.enabled) return;
-  
+
   const delay = LABEL_RENAME_DELAYS[labelRenameAttempts] || 1000;
   labelRenameAttempts++;
-  
+
   setTimeout(() => {
     if (!effective?.enabled) return;
-    
+
     // Try to rename labels on the entire document
     const siteId = effective.__siteId;
     if (!siteId) return;
-    
+
     const rule = NAV_LABEL_RULES[siteId];
     if (!rule) return;
-    
+
     let foundAny = false;
-    
+
     // Check if sidebar is loaded
     if (rule.entrySelectors?.length) {
       const selector = rule.entrySelectors.join(",");
@@ -613,7 +616,7 @@ function attemptLabelRename() {
         }
       });
     }
-    
+
     // Continue trying if we haven't found/renamed anything yet
     if (!foundAny && labelRenameAttempts < MAX_LABEL_RENAME_ATTEMPTS) {
       attemptLabelRename();
@@ -660,7 +663,7 @@ export async function start() {
 
   hookSpaNavigation(scheduleRouteCheck);
   watchUrlChanges(scheduleRouteCheck);
-  
+
   // YouTube loads sidebar asynchronously - schedule delayed label checks
   if (siteId === "youtube") {
     scheduleDelayedLabelRename();
