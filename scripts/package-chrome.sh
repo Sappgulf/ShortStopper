@@ -10,9 +10,25 @@ rm -f "$OUT_ZIP"
 
 cd "$ROOT"
 
+INCLUDE_PATHS=(
+  adapters
+  core
+  policy
+  runtime
+  storage
+  platform
+  assets
+  rules
+  ui
+  manifest.json
+  service_worker.js
+  README.md
+  PRIVACY.md
+  SECURITY.md
+)
+
 zip -r "$OUT_ZIP" \
-  adapters core policy runtime storage platform assets rules content_scripts ui \
-  manifest.json service_worker.js README.md PRIVACY.md SECURITY.md \
+  "${INCLUDE_PATHS[@]}" \
   -x \
   "_metadata/*" \
   "adapters/ios/*" \

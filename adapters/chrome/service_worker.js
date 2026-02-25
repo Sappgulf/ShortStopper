@@ -49,6 +49,7 @@ let adblockHistoryLoaded = false;
 let adblockHistoryLoadPromise = null;
 let adblockHistoryDirty = false;
 let adblockHistoryFlushTimer = null;
+let lastRulesetSyncKey = "";
 
 (async () => {
   try {
@@ -316,8 +317,15 @@ async function applyRulesets(settings) {
     disableRulesetIds.push("cosmetic_block");
   }
 
+  // Avoid redundant DNR updates on repeated storage events with unchanged outcomes.
+  const enableSorted = [...enableRulesetIds].sort();
+  const disableSorted = [...disableRulesetIds].sort();
+  const syncKey = JSON.stringify({ enable: enableSorted, disable: disableSorted });
+  if (syncKey === lastRulesetSyncKey) return;
+
   try {
-    await updateRulesets(enableRulesetIds, disableRulesetIds);
+    await updateRulesets(enableSorted, disableSorted);
+    lastRulesetSyncKey = syncKey;
   } catch (err) {
     // Log error but don't throw - ruleset update failures shouldn't break the extension
     console.error("Failed to update rulesets:", err);
@@ -382,6 +390,7 @@ addStorageChangeListener(async (changes, area) => {
     keys.includes("redirectShorts") ||
     keys.includes("strictRedirect") ||
     keys.includes("whitelistMode") ||
+    keys.includes("channelOverrides") ||
     keys.includes("adblockInsights")
   ) {
     const settings = await getSettings();

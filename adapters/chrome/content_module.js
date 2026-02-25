@@ -130,6 +130,26 @@ let lastVideoId = null;
 let lastVideoSite = null;
 let pendingMutations = [];
 let mutationFlushTimer = null;
+const SETTINGS_KEYS_THAT_AFFECT_CONTENT = new Set([
+  "enabled",
+  "blockYouTubeShorts",
+  "blockInstagramReels",
+  "blockFacebookReels",
+  "blockTikTok",
+  "blockSnapchatSpotlight",
+  "blockPinterestWatch",
+  "redirectShorts",
+  "hideShelves",
+  "hideLinks",
+  "hideSidebarEntry",
+  "hideChannelShortsTab",
+  "strictRedirect",
+  "whitelistMode",
+  "channelWhitelist",
+  "channelOverrides",
+  "adBlockEnabled",
+  "adblockInsights"
+]);
 
 // ============================================================================
 // HELPERS
@@ -671,6 +691,8 @@ export async function start() {
 
   addStorageChangeListener(async (changes, area) => {
     if (area !== "sync") return;
+    const changedKeys = Object.keys(changes || {});
+    if (!changedKeys.some((key) => SETTINGS_KEYS_THAT_AFFECT_CONTENT.has(key))) return;
     settings = await getSettings();
     scheduleRouteCheck();
   });

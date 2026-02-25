@@ -63,11 +63,19 @@ export function resolveEffectiveSettings(settings, channelKey) {
  * @param {import("../storage/settings.js").Settings} settings
  */
 export function shouldEnableShortsRuleset(settings) {
-  // Enable DNR redirect rules when extension is enabled and redirect is on
-  // The content script handles per-channel overrides and whitelist mode
+  // DNR redirect is "strict" mode. It is fast, but it cannot honor YouTube
+  // per-channel decisions because channel identity is not available at request time.
+  const hasChannelOverrides = !!(
+    settings?.channelOverrides &&
+    Object.keys(settings.channelOverrides).length
+  );
+
   return (
     !!settings.enabled &&
-    !!settings.redirectShorts
+    !!settings.redirectShorts &&
+    !!settings.strictRedirect &&
+    !settings.whitelistMode &&
+    !hasChannelOverrides
   );
 }
 

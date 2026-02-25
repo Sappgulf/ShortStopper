@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { classifyRoute } from "../policy/route_policy.js";
 import { resolveRoutePolicy, shouldBlockRoute } from "../policy/decision.js";
-import { resolveEffectiveSettings } from "../policy/settings_policy.js";
+import { resolveEffectiveSettings, shouldEnableShortsRuleset } from "../policy/settings_policy.js";
 import { DEFAULT_SETTINGS } from "../storage/settings.js";
 
 function makeEffective(overrides = {}, channelKey = null) {
@@ -70,6 +70,36 @@ function testShouldBlockRoute() {
   );
 }
 
+function testStrictRedirectRulesetGating() {
+  assert.equal(
+    shouldEnableShortsRuleset({ ...DEFAULT_SETTINGS }),
+    true,
+    "Strict redirect ruleset should be enabled by default"
+  );
+
+  assert.equal(
+    shouldEnableShortsRuleset({ ...DEFAULT_SETTINGS, strictRedirect: false }),
+    false,
+    "Strict redirect toggle should disable DNR redirect ruleset"
+  );
+
+  assert.equal(
+    shouldEnableShortsRuleset({ ...DEFAULT_SETTINGS, whitelistMode: true }),
+    false,
+    "Allowlist mode should disable DNR redirect ruleset so per-channel rules can apply"
+  );
+
+  assert.equal(
+    shouldEnableShortsRuleset({
+      ...DEFAULT_SETTINGS,
+      channelOverrides: { "@allowed-channel": "off" }
+    }),
+    false,
+    "Per-channel overrides should disable DNR redirect ruleset so channel modes can apply"
+  );
+}
+
 testClassifyRoute();
 testShouldBlockRoute();
+testStrictRedirectRulesetGating();
 console.log("policy tests: ok");

@@ -16,13 +16,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Build Chrome zip
-        run: |
-          mkdir -p dist
-          zip -r dist/ShortStopper-chrome.zip \
-            adapters core assets rules content_scripts ui \
-            manifest.json service_worker.js README.md PRIVACY.md \
-            -x "_metadata/*" "adapters/ios/*" "dist/*"
+        run: ./scripts/package-chrome.sh
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -38,4 +38,3 @@ jobs:
           gh release create "${GITHUB_REF_NAME}" dist/ShortStopper-chrome.zip \
             --title "${GITHUB_REF_NAME}" \
             --generate-notes
-
