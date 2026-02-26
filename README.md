@@ -42,6 +42,20 @@ ShortStopper blocks short-form video feeds across major platforms while keeping 
 
 > **Note:** Chrome requires Developer mode for extensions not from the Web Store. This is the standard way to install unpacked extensions.
 
+### Safari (macOS)
+
+Requires Xcode (Safari Web Extension converter is bundled with Xcode).
+
+1. Run `scripts/package-safari-macos.sh`
+2. Open the generated Xcode project at `dist/safari-macos/project/ShortStopperSafari/ShortStopperSafari.xcodeproj` if you want to sign/run it
+3. Built outputs are written to `dist/safari-macos/`
+   - `ShortStopperSafari-macOS-unsigned.zip`
+   - `DerivedData/Build/Products/Release/ShortStopperSafari.app`
+
+Optional bundle ID override:
+
+`scripts/package-safari-macos.sh --bundle-id com.yourname.shortstopper`
+
 ## Features
 
 ### Core blocking
