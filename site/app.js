@@ -4,7 +4,7 @@ const CONFIG = {
   SOURCE_URL: "https://github.com/Sappgulf/ShortStopper"
 };
 
-const MANIFEST_URLS = ["../manifest.json", "manifest.json"];
+const MANIFEST_URLS = ["manifest.json", "../manifest.json"];
 
 function setLinkState(el, url, enabledLabel, disabledLabel) {
   if (!el) return;
