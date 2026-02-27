@@ -3,15 +3,11 @@
     "trailingSlash": false,
     "headers": [
         {
-            "source": "/bin/(.*).zip",
+            "source": "/site/bin/(.*).zip",
             "headers": [
                 {
                     "key": "Content-Disposition",
                     "value": "attachment; filename=$1.zip"
-                },
-                {
-                    "key": "Cache-Control",
-                    "value": "public, max-age=3600, must-revalidate"
                 }
             ]
         }
@@ -22,20 +18,16 @@
             "destination": "/site/bin/shortstopper.zip"
         },
         {
-            "source": "/assets/(.*)",
-            "destination": "/site/assets/$1"
+            "source": "/(assets|bin)/(.*)",
+            "destination": "/site/$1/$2"
         },
         {
-            "source": "/app.js",
-            "destination": "/site/app.js"
+            "source": "/(.*)\\.(js|css|json|png|jpg|svg|ico)",
+            "destination": "/site/$1.$2"
         },
         {
-            "source": "/styles.css",
-            "destination": "/site/styles.css"
-        },
-        {
-            "source": "/manifest.json",
-            "destination": "/site/manifest.json"
+            "source": "/",
+            "destination": "/site/index.html"
         },
         {
             "source": "/(.*)",
