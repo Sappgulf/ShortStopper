@@ -468,6 +468,66 @@ function setObserverActive(active) {
 }
 
 // ============================================================================
+// CLICK INTERCEPTION (Proactive Blocking)
+// ============================================================================
+
+function setupClickInterception() {
+  // Use capture phase to intercept before SPA routers in many cases
+  window.addEventListener(
+    "click",
+    (e) => {
+      if (!effective?.enabled) return;
+
+      const anchor = e.target.closest("a[href]");
+      if (!anchor) return;
+
+      const raw = anchor.getAttribute("href") || "";
+      if (!raw) return;
+
+      // Skip relative hash links or javascript:
+      if (raw.startsWith("#") || raw.startsWith("javascript:")) return;
+
+      let u;
+      try {
+        u = new URL(raw, location.origin);
+      } catch {
+        return;
+      }
+
+      const siteId = effective.__siteId;
+      const targetSite = siteFromHost(u.hostname);
+      if (!targetSite || targetSite !== siteId) return;
+
+      const policy = getPolicyForUrl(siteId, u.href, u.pathname);
+      if (policy.action !== "block") return;
+
+      const decision = shouldBlockRoute(effective, policy, siteId, u.href);
+      if (decision.block) {
+        debugLog("click_intercepted", { url: u.href, reason: decision.reason });
+
+        // Prevent navigation
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        // Handle redirect or overlay
+        if (decision.redirectUrl && decision.redirectUrl !== location.href) {
+          if (isSafeRedirectTarget(siteId, decision.redirectUrl)) {
+            // Count it
+            bumpBlocked(1, effective.__statsKey || null);
+            location.assign(decision.redirectUrl);
+            return;
+          }
+        }
+
+        // Fallback: show overlay or hard hide if already on the way
+        showBlockedOverlay(siteId);
+      }
+    },
+    true
+  );
+}
+
+// ============================================================================
 // MAIN APPLY LOGIC
 // ============================================================================
 
@@ -683,6 +743,7 @@ export async function start() {
 
   hookSpaNavigation(scheduleRouteCheck);
   watchUrlChanges(scheduleRouteCheck);
+  setupClickInterception();
 
   // YouTube loads sidebar asynchronously - schedule delayed label checks
   if (siteId === "youtube") {

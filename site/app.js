@@ -1,6 +1,6 @@
 const CONFIG = {
   WEBSTORE_URL: "",
-  DOWNLOAD_ZIP_URL: "https://github.com/Sappgulf/ShortStopper/archive/refs/heads/main.zip",
+  DOWNLOAD_ZIP_URL: "bin/shortstopper.zip",
   SOURCE_URL: "https://github.com/Sappgulf/ShortStopper"
 };
 
@@ -65,6 +65,20 @@ function setYear() {
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 }
 
+function copyToClipboard(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const originalText = btn.innerText;
+    btn.innerText = 'COPIED!';
+    btn.style.borderColor = 'var(--accent-2)';
+    btn.style.color = 'var(--accent-2)';
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.style.borderColor = 'var(--accent)';
+      btn.style.color = 'var(--accent)';
+    }, 2000);
+  });
+}
+
 function setupCopyButtons() {
   const buttons = document.querySelectorAll("[data-copy]");
   buttons.forEach((btn) => {
@@ -107,8 +121,8 @@ function initLinks() {
     if (!type) return;
     const url =
       type === "webstore" ? CONFIG.WEBSTORE_URL :
-      type === "zip" ? CONFIG.DOWNLOAD_ZIP_URL :
-      type === "source" ? CONFIG.SOURCE_URL : "";
+        type === "zip" ? CONFIG.DOWNLOAD_ZIP_URL :
+          type === "source" ? CONFIG.SOURCE_URL : "";
     setLinkState(el, url, el.getAttribute("data-label"), el.getAttribute("data-disabled-label"));
   });
 }

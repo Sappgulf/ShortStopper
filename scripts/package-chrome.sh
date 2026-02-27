@@ -38,3 +38,10 @@ zip -r "$OUT_ZIP" \
   "scripts/*"
 
 echo "Created: $OUT_ZIP"
+
+# Sync to local website for self-hosting
+SITE_BIN="$ROOT/site/bin"
+mkdir -p "$SITE_BIN"
+cp "$OUT_ZIP" "$SITE_BIN/shortstopper.zip"
+
+echo "Deployed to: $SITE_BIN/shortstopper.zip"

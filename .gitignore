@@ -14,6 +14,10 @@ _metadata/
 # Build output
 dist/
 *.zip
+!site/bin/*.zip
+
+# Generated Xcode project (iOS Safari Web Extension)
+adapters/ios/project/
 
 # Node
 node_modules/

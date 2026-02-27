@@ -1,0 +1,130 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - img "ShortStopper logo" [ref=e4]
+      - generic [ref=e5]:
+        - generic [ref=e6]: ShortStopper
+        - generic [ref=e7]: Block short-form feeds
+    - navigation "Primary" [ref=e8]:
+      - link "Why it works" [ref=e9] [cursor=pointer]:
+        - /url: "#features"
+      - link "Install" [ref=e10] [cursor=pointer]:
+        - /url: "#install"
+      - link "Security" [ref=e11] [cursor=pointer]:
+        - /url: "#security"
+      - link "FAQ" [ref=e12] [cursor=pointer]:
+        - /url: "#faq"
+    - link "Get ShortStopper" [ref=e14] [cursor=pointer]:
+      - /url: "#install"
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - generic [ref=e18]: Chrome MV3 extension
+        - heading "ShortStopper" [level=1] [ref=e19]
+        - paragraph [ref=e20]: Block Shorts and Reels without breaking normal browsing.
+        - generic [ref=e21]:
+          - link "Web Store coming soon" [disabled]:
+            - /url: "#"
+          - link "Download ZIP (Load Unpacked)" [ref=e22] [cursor=pointer]:
+            - /url: https://github.com/Sappgulf/ShortStopper/archive/refs/heads/main.zip
+        - generic [ref=e23]:
+          - link "View source" [ref=e24] [cursor=pointer]:
+            - /url: https://github.com/Sappgulf/ShortStopper
+          - generic [ref=e25]: Web Store installs are recommended. ZIP is for Developer Mode.
+        - generic [ref=e26]:
+          - generic [ref=e27]: SPA-safe routing
+          - generic [ref=e28]: Overlay-first blocking
+          - generic [ref=e29]: Local-only data
+      - generic [ref=e30]:
+        - heading "What it blocks" [level=2] [ref=e31]
+        - list [ref=e32]:
+          - listitem [ref=e33]: Shorts and Reels feeds
+          - listitem [ref=e34]: Short-form shelves and nav entries
+          - listitem [ref=e35]: Sponsored cards when adblock is enabled
+        - generic [ref=e36]: Watch pages, search results, and profiles stay accessible.
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - heading "Why it works" [level=2] [ref=e39]
+        - paragraph [ref=e40]: "Simple, predictable behavior: block the feed, keep the rest of the site usable."
+      - generic [ref=e41]:
+        - article [ref=e42]:
+          - heading "Smart route policy" [level=3] [ref=e43]
+          - paragraph [ref=e44]: Centralized classification avoids overblocking and respects normal watch, results, and profile routes.
+        - article [ref=e45]:
+          - heading "Overlay-first blocking" [level=3] [ref=e46]
+          - paragraph [ref=e47]: Overlay-first blocking prevents redirect loops and keeps SPA state stable.
+        - article [ref=e48]:
+          - heading "Allow once + allowlist" [level=3] [ref=e49]
+          - paragraph [ref=e50]: Temporarily allow Shorts or whitelist channels without disabling the extension.
+        - article [ref=e51]:
+          - heading "Security-first architecture" [level=3] [ref=e52]
+          - paragraph [ref=e53]: MV3, strict CSP, message validation, and local-only storage by default.
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - heading "Install in minutes" [level=2] [ref=e56]
+        - paragraph [ref=e57]: Use the Web Store for the smoothest install. Developer Mode is available for ZIP builds.
+      - generic [ref=e58]:
+        - generic [ref=e59]:
+          - heading "Chrome Web Store" [level=3] [ref=e60]
+          - list [ref=e61]:
+            - listitem [ref=e62]: Open the Web Store listing.
+            - listitem [ref=e63]:
+              - text: Click
+              - strong [ref=e64]: Add to Chrome
+              - text: .
+            - listitem [ref=e65]: Confirm permissions.
+          - link "Web Store coming soon" [disabled]:
+            - /url: "#"
+        - generic [ref=e66]:
+          - heading "Load Unpacked (ZIP)" [level=3] [ref=e67]
+          - list [ref=e68]:
+            - listitem [ref=e69]: Download the ZIP and unzip it.
+            - listitem [ref=e70]:
+              - text: Open
+              - code [ref=e71]: chrome://extensions
+              - text: .
+            - listitem [ref=e72]: Enable Developer Mode.
+            - listitem [ref=e73]:
+              - text: Select
+              - strong [ref=e74]: Load unpacked
+              - text: .
+          - generic [ref=e75]:
+            - link "Download ZIP" [ref=e76] [cursor=pointer]:
+              - /url: https://github.com/Sappgulf/ShortStopper/archive/refs/heads/main.zip
+            - button "Copy extensions URL" [ref=e77] [cursor=pointer]
+          - button "Copy checklist" [ref=e79] [cursor=pointer]
+    - generic [ref=e80]:
+      - generic [ref=e81]:
+        - heading "Security and privacy" [level=2] [ref=e82]
+        - paragraph [ref=e83]: ShortStopper uses least-privilege permissions and keeps data local.
+      - generic [ref=e84]:
+        - generic [ref=e85]:
+          - heading "Least privilege permissions" [level=3] [ref=e86]
+          - paragraph [ref=e87]: Hosts are scoped to supported sites. Optional adblock permissions are domain-limited.
+        - generic [ref=e88]:
+          - heading "No remote code" [level=3] [ref=e89]
+          - paragraph [ref=e90]: Everything ships with the extension. No external scripts or CDNs.
+        - generic [ref=e91]:
+          - heading "No analytics by default" [level=3] [ref=e92]
+          - paragraph [ref=e93]: ShortStopper does not track or collect browsing data.
+    - generic [ref=e94]:
+      - generic [ref=e95]:
+        - heading "FAQ" [level=2] [ref=e96]
+        - paragraph [ref=e97]: Quick answers to common questions.
+      - generic [ref=e98]:
+        - generic [ref=e99]:
+          - heading "Why is the Web Store recommended?" [level=3] [ref=e100]
+          - paragraph [ref=e101]: It provides automatic updates, verified distribution, and a smoother install experience.
+        - generic [ref=e102]:
+          - heading "What is blocked vs allowed?" [level=3] [ref=e103]
+          - paragraph [ref=e104]: Short-form feeds like Shorts and Reels are blocked. Search results, watch pages, channels, and profiles are allowed.
+        - generic [ref=e105]:
+          - heading "Does ShortStopper collect data?" [level=3] [ref=e106]
+          - paragraph [ref=e107]: No. Settings and stats live locally. Optional insights store domain-only counts locally.
+  - contentinfo [ref=e108]:
+    - generic [ref=e109]:
+      - generic [ref=e110]:
+        - img "ShortStopper" [ref=e111]
+        - generic [ref=e112]: ShortStopper
+      - generic [ref=e113]: Version - | Last updated Feb 25, 2026
+    - generic [ref=e115]: Copyright 2026 ShortStopper

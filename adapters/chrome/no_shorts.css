@@ -55,15 +55,24 @@ ytd-mini-guide-entry-renderer:has(a[href*="/shorts"]) {
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-shelf-renderer[is-shorts],
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-reel-shelf-renderer,
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-reel-item-renderer,
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-item-renderer:has(ytd-reel-item-renderer),
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-item-renderer:has([is-shorts]),
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-item-renderer:has(ytm-shorts-lockup-view-model-v2),
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-item-renderer:has([class*="ShortsLockupViewModel"]),
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-item-renderer[is-shorts],
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-item-renderer[is-shorts-grid],
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-video-renderer[is-shorts],
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-grid-video-renderer[is-shorts],
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]),
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-section-renderer:has(ytd-reel-shelf-renderer),
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-rich-section-renderer:has([is-shorts]),
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] [is-shorts],
 :root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-shorts,
-:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-shorts-video-renderer {
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-shorts-video-renderer,
+/* Search results Shorts shelf */
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-shelf-renderer:has(a[href^="/shorts"]),
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-item-section-renderer:has(ytd-reel-shelf-renderer),
+:root[data-ns-enabled="true"][data-ns-hide-shelves="true"] ytd-item-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]) {
   display: none !important;
 }
 
@@ -149,7 +158,16 @@ ytd-mini-guide-entry-renderer:has(a[href*="/shorts"]) {
    ============================================================================ */
 
 :root[data-ns-enabled="true"][data-ns-site="tiktok"][data-ns-hide-sidebar="true"] a[href*="/foryou"],
-:root[data-ns-enabled="true"][data-ns-site="tiktok"][data-ns-hide-sidebar="true"] a[href*="/fyp"] {
+:root[data-ns-enabled="true"][data-ns-site="tiktok"][data-ns-hide-sidebar="true"] a[href*="/fyp"],
+:root[data-ns-enabled="true"][data-ns-site="tiktok"][data-ns-hide-sidebar="true"] a[href*="/explore"],
+:root[data-ns-enabled="true"][data-ns-site="tiktok"][data-ns-hide-sidebar="true"] a[href*="/trending"] {
+  display: none !important;
+}
+
+/* Hide slop grids in TikTok */
+:root[data-ns-enabled="true"][data-ns-site="tiktok"][data-ns-hide-shelves="true"] [data-e2e="explore-item"],
+:root[data-ns-enabled="true"][data-ns-site="tiktok"][data-ns-hide-shelves="true"] [data-e2e="user-post-item"],
+:root[data-ns-enabled="true"][data-ns-site="tiktok"][data-ns-hide-shelves="true"] [class*="AVideoContainer"] {
   display: none !important;
 }
 

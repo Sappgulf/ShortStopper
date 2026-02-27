@@ -201,18 +201,25 @@ function classifyTikTok(pathname) {
     return { action: "block", reason: "video", isFeed: false };
   }
 
-  // Explore/discover feeds
-  if (parts[0] === "explore" || parts[0] === "discover") {
-    return { action: "block", reason: "explore", isFeed: true };
+  // Explore/discover/trending feeds
+  if (parts[0] === "explore" || parts[0] === "discover" || parts[0] === "trending" || parts[0] === "search") {
+    // Note: search is allowed in some cases, but the feed below it is slop.
+    // However, keeping search allowed for utility. Discover/trending are definitely slop.
+    if (parts[0] !== "search") {
+      return { action: "block", reason: "feed", isFeed: true };
+    }
   }
 
-  // Allow profile pages, search, settings
-  if (parts[0]?.startsWith("@") && !parts[1]) return { action: "allow", reason: "profile" };
-  if (parts[0] === "search") return { action: "allow", reason: "search" };
-  if (parts[0] === "setting") return { action: "allow", reason: "settings" };
+  // Allow settings, login, signup
+  if (parts[0] === "setting" || parts[0] === "settings") return { action: "allow", reason: "settings" };
   if (parts[0] === "login" || parts[0] === "signup") return { action: "allow", reason: "auth" };
 
-  // Default: block (TikTok is primarily short-form)
+  // Allow profile pages? User says "i dont even want to see the slop".
+  // TikTok profiles are just grids of slop. Let's make it optional or stricter.
+  // For now, allow profile but block if they navigate to a video.
+  if (parts[0]?.startsWith("@") && !parts[1]) return { action: "allow", reason: "profile" };
+
+  // Default: block (TikTok is primarily short-form slop)
   return { action: "block", reason: "default_block", isFeed: true };
 }
 
