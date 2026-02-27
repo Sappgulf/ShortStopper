@@ -2,17 +2,17 @@
 
 :root {
   color-scheme: dark;
-  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-  --glass: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-hover: rgba(255, 255, 255, 0.06);
+  --bg-gradient: linear-gradient(135deg, #000000 0%, #050505 100%);
+  --glass: rgba(255, 255, 255, 0.02);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-hover: rgba(255, 255, 255, 0.04);
   --fg: #f8fafc;
-  --muted: #94a3b8;
-  --accent: #6366f1;
-  /* Indigo */
-  --accent-glow: rgba(99, 102, 241, 0.3);
-  --danger: #ef4444;
-  --success: #22c55e;
+  --muted: #64748b;
+  --accent: #4ade80;
+  /* Neon Green */
+  --accent-glow: rgba(74, 222, 128, 0.2);
+  --danger: #ff0055;
+  --success: #4ade80;
   --font-main: 'Inter', -apple-system, system-ui, sans-serif;
   --radius-xl: 18px;
   --radius-lg: 12px;
@@ -45,26 +45,31 @@ body {
 }
 
 .brand {
-  font-size: 18px;
-  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 900;
   letter-spacing: -0.5px;
-  background: linear-gradient(to right, #fff, #94a3b8);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.logo-mini {
+  width: 14px;
+  height: 14px;
+  filter: drop-shadow(0 0 5px var(--accent-glow));
 }
 
 .tag {
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 800;
   padding: 4px 10px;
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  border-radius: 999px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
   color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 0 15px var(--accent-glow);
+  letter-spacing: 1px;
 }
 
 /* Main Container (Glassmorph) */

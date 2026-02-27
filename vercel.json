@@ -19,11 +19,27 @@
     "rewrites": [
         {
             "source": "/download",
-            "destination": "/bin/shortstopper.zip"
+            "destination": "/site/bin/shortstopper.zip"
+        },
+        {
+            "source": "/assets/(.*)",
+            "destination": "/site/assets/$1"
+        },
+        {
+            "source": "/app.js",
+            "destination": "/site/app.js"
+        },
+        {
+            "source": "/styles.css",
+            "destination": "/site/styles.css"
+        },
+        {
+            "source": "/manifest.json",
+            "destination": "/site/manifest.json"
         },
         {
             "source": "/(.*)",
-            "destination": "/index.html"
+            "destination": "/site/index.html"
         }
     ]
 }
